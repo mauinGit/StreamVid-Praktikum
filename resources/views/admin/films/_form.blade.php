@@ -41,7 +41,7 @@
     <p style="font-size:0.75rem;color:var(--sv-text-muted);margin-bottom:8px;">Ukuran rekomendasi: 400x600px (rasio 2:3). Format: JPG, PNG, WebP. Maks 2MB.</p>
     @if(isset($film) && $film->thumbnail)
         <div style="margin-bottom:10px;display:flex;align-items:center;gap:12px;">
-            <img src="{{ asset('storage/' . $film->thumbnail) }}" style="width:80px;height:120px;object-fit:cover;border-radius:8px;border:1px solid var(--sv-border);">
+            <img src="{{ str_starts_with($film->thumbnail, 'http') ? $film->thumbnail : asset('storage/' . $film->thumbnail) }}" style="width:80px;height:120px;object-fit:cover;border-radius:8px;border:1px solid var(--sv-border);">
             <span style="font-size:0.8rem;color:var(--sv-text-muted);">Thumbnail saat ini</span>
         </div>
     @endif
@@ -54,23 +54,44 @@
     <p style="font-size:0.75rem;color:var(--sv-text-muted);margin-bottom:8px;">Ukuran rekomendasi: 1920x1080px (rasio 16:9). Format: JPG, PNG, WebP. Maks 4MB.</p>
     @if(isset($film) && $film->cover)
         <div style="margin-bottom:10px;display:flex;align-items:center;gap:12px;">
-            <img src="{{ asset('storage/' . $film->cover) }}" style="width:160px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--sv-border);">
+            <img src="{{ str_starts_with($film->cover, 'http') ? $film->cover : asset('storage/' . $film->cover) }}" style="width:160px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--sv-border);">
             <span style="font-size:0.8rem;color:var(--sv-text-muted);">Cover saat ini</span>
         </div>
     @endif
     <input type="file" name="cover" class="sv-input" accept="image/jpeg,image/png,image/webp" style="padding:10px;">
 </div>
 
-{{-- Video URL --}}
+{{-- Video Input --}}
 <div class="sv-form-group">
-    <label class="sv-label">🎬 Video URL</label>
-    <p style="font-size:0.75rem;color:var(--sv-text-muted);margin-bottom:8px;">
-        Masukkan URL video langsung (MP4/WebM). Contoh sumber gratis:
-        <br>• <a href="https://sample-videos.com" target="_blank" style="color:var(--sv-accent);">sample-videos.com</a>
-        • <a href="https://archive.org" target="_blank" style="color:var(--sv-accent);">archive.org</a>
-        • Atau upload ke Google Drive → share link
+    <label class="sv-label">🎬 Video Film</label>
+    <p style="font-size:0.75rem;color:var(--sv-text-muted);margin-bottom:12px;">
+        Pilih salah satu: upload file video langsung <strong>(direkomendasikan)</strong> atau masukkan URL video.
     </p>
-    <input type="text" name="video_url" class="sv-input" value="{{ old('video_url', $film->video_url ?? '') }}" required placeholder="https://example.com/video.mp4">
+
+    {{-- Tab Selector --}}
+    <div style="display:flex;gap:0;margin-bottom:16px;">
+        <button type="button" onclick="switchVideoTab('upload')" id="tab-upload" style="flex:1;padding:10px;border:1px solid var(--sv-border);border-radius:8px 0 0 8px;background:var(--sv-accent);color:white;font-weight:600;font-size:0.85rem;cursor:pointer;font-family:inherit;">📁 Upload File</button>
+        <button type="button" onclick="switchVideoTab('url')" id="tab-url" style="flex:1;padding:10px;border:1px solid var(--sv-border);border-radius:0 8px 8px 0;background:var(--sv-bg-primary);color:var(--sv-text-secondary);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:inherit;">🔗 URL Eksternal</button>
+    </div>
+
+    {{-- Upload Tab --}}
+    <div id="video-upload-tab">
+        @if(isset($film) && $film->video_url && !str_starts_with($film->video_url, 'http'))
+            <div style="margin-bottom:10px;padding:10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:8px;">
+                <span style="color:#22c55e;font-size:0.85rem;">✓ Video sudah diupload: {{ basename($film->video_url) }}</span>
+            </div>
+        @endif
+        <input type="file" name="video_file" class="sv-input" accept="video/mp4,video/webm,video/ogg" style="padding:10px;">
+        <p style="font-size:0.7rem;color:var(--sv-text-muted);margin-top:6px;">Format: MP4, WebM, OGG. Maks 100MB.</p>
+    </div>
+
+    {{-- URL Tab --}}
+    <div id="video-url-tab" style="display:none;">
+        <input type="text" name="video_url" class="sv-input" value="{{ old('video_url', isset($film) && str_starts_with($film->video_url ?? '', 'http') ? $film->video_url : '') }}" placeholder="https://example.com/video.mp4">
+        <p style="font-size:0.7rem;color:var(--sv-text-muted);margin-top:6px;">
+            Masukkan URL langsung ke file video (MP4/WebM). ⚠️ Google Drive & YouTube tidak bisa diputar langsung.
+        </p>
+    </div>
 </div>
 
 <div class="sv-form-group">
@@ -81,3 +102,32 @@
         <span class="sv-label" style="margin-bottom:0;">⭐ Featured Film (tampil di Hero Section)</span>
     </label>
 </div>
+
+<script>
+function switchVideoTab(tab) {
+    const uploadTab = document.getElementById('video-upload-tab');
+    const urlTab = document.getElementById('video-url-tab');
+    const btnUpload = document.getElementById('tab-upload');
+    const btnUrl = document.getElementById('tab-url');
+
+    if (tab === 'upload') {
+        uploadTab.style.display = 'block';
+        urlTab.style.display = 'none';
+        btnUpload.style.background = 'var(--sv-accent)';
+        btnUpload.style.color = 'white';
+        btnUrl.style.background = 'var(--sv-bg-primary)';
+        btnUrl.style.color = 'var(--sv-text-secondary)';
+        // Clear URL input when switching to upload
+        document.querySelector('input[name="video_url"]').value = '';
+    } else {
+        uploadTab.style.display = 'none';
+        urlTab.style.display = 'block';
+        btnUrl.style.background = 'var(--sv-accent)';
+        btnUrl.style.color = 'white';
+        btnUpload.style.background = 'var(--sv-bg-primary)';
+        btnUpload.style.color = 'var(--sv-text-secondary)';
+        // Clear file input when switching to URL
+        document.querySelector('input[name="video_file"]').value = '';
+    }
+}
+</script>

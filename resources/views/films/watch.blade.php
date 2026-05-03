@@ -1,29 +1,26 @@
 @extends('layouts.app')
 @section('content')
 <div class="sv-mt-nav" style="padding:20px 48px;">
+    @php
+        // Determine video source: uploaded file or external URL
+        $isUploadedVideo = $film->video_url && !str_starts_with($film->video_url, 'http');
+        $videoSrc = $isUploadedVideo
+            ? asset('storage/' . $film->video_url)
+            : $film->video_url;
+    @endphp
+
     {{-- Video Player --}}
     <div style="position:relative;width:100%;max-width:1200px;margin:0 auto;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-        @if(str_contains($film->video_url, 'youtube.com/embed') || str_contains($film->video_url, 'youtu.be'))
-            {{-- YouTube Embed (may be blocked on localhost) --}}
-            <iframe
-                src="{{ $film->video_url }}"
-                style="width:100%;height:100%;border:none;"
-                allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            ></iframe>
-        @else
-            {{-- HTML5 Video Player (direct URLs) --}}
-            <video
-                controls
-                autoplay
-                style="width:100%;height:100%;object-fit:contain;"
-                controlsList="nodownload"
-            >
-                <source src="{{ $film->video_url }}" type="video/mp4">
-                <source src="{{ $film->video_url }}" type="video/webm">
-                Browser Anda tidak mendukung video player.
-            </video>
-        @endif
+        <video
+            controls
+            autoplay
+            style="width:100%;height:100%;object-fit:contain;"
+            controlsList="nodownload"
+        >
+            <source src="{{ $videoSrc }}" type="video/mp4">
+            <source src="{{ $videoSrc }}" type="video/webm">
+            Browser Anda tidak mendukung video player.
+        </video>
     </div>
 
     {{-- Film Info --}}

@@ -38,9 +38,15 @@ class FilmController extends Controller
             'release_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'video_url' => 'required|string',
+            'video_file' => 'nullable|mimes:mp4,webm,ogg|max:102400',
+            'video_url' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
+
+        // Must have either video file or video URL
+        if (!$request->hasFile('video_file') && !$request->filled('video_url')) {
+            return back()->withErrors(['video_url' => 'Upload file video atau masukkan URL video.'])->withInput();
+        }
 
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
@@ -51,6 +57,12 @@ class FilmController extends Controller
         if ($request->hasFile('cover')) {
             $validated['cover'] = $request->file('cover')->store('films/covers', 'public');
         }
+
+        // Handle video upload
+        if ($request->hasFile('video_file')) {
+            $validated['video_url'] = $request->file('video_file')->store('films/videos', 'public');
+        }
+        unset($validated['video_file']);
 
         $validated['is_featured'] = $request->has('is_featured');
 
@@ -76,14 +88,14 @@ class FilmController extends Controller
             'release_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'video_url' => 'required|string',
+            'video_file' => 'nullable|mimes:mp4,webm,ogg|max:102400',
+            'video_url' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
 
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail
-            if ($film->thumbnail && Storage::disk('public')->exists($film->thumbnail)) {
+            if ($film->thumbnail && !str_starts_with($film->thumbnail, 'http') && Storage::disk('public')->exists($film->thumbnail)) {
                 Storage::disk('public')->delete($film->thumbnail);
             }
             $validated['thumbnail'] = $request->file('thumbnail')->store('films/thumbnails', 'public');
@@ -93,14 +105,25 @@ class FilmController extends Controller
 
         // Handle cover upload
         if ($request->hasFile('cover')) {
-            // Delete old cover
-            if ($film->cover && Storage::disk('public')->exists($film->cover)) {
+            if ($film->cover && !str_starts_with($film->cover, 'http') && Storage::disk('public')->exists($film->cover)) {
                 Storage::disk('public')->delete($film->cover);
             }
             $validated['cover'] = $request->file('cover')->store('films/covers', 'public');
         } else {
             unset($validated['cover']);
         }
+
+        // Handle video upload
+        if ($request->hasFile('video_file')) {
+            // Delete old video if it was uploaded
+            if ($film->video_url && !str_starts_with($film->video_url, 'http') && Storage::disk('public')->exists($film->video_url)) {
+                Storage::disk('public')->delete($film->video_url);
+            }
+            $validated['video_url'] = $request->file('video_file')->store('films/videos', 'public');
+        } elseif (!$request->filled('video_url')) {
+            unset($validated['video_url']);
+        }
+        unset($validated['video_file']);
 
         $validated['is_featured'] = $request->has('is_featured');
 
@@ -112,12 +135,11 @@ class FilmController extends Controller
 
     public function destroy(Film $film)
     {
-        // Delete files
-        if ($film->thumbnail && Storage::disk('public')->exists($film->thumbnail)) {
-            Storage::disk('public')->delete($film->thumbnail);
-        }
-        if ($film->cover && Storage::disk('public')->exists($film->cover)) {
-            Storage::disk('public')->delete($film->cover);
+        // Delete uploaded files
+        foreach (['thumbnail', 'cover', 'video_url'] as $field) {
+            if ($film->$field && !str_starts_with($film->$field, 'http') && Storage::disk('public')->exists($film->$field)) {
+                Storage::disk('public')->delete($film->$field);
+            }
         }
 
         $film->delete();
