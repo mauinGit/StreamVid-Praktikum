@@ -3,10 +3,16 @@
 
 {{-- Hero Section --}}
 @if($heroFilm)
+@php
+    $heroCover = $heroFilm->cover
+        ? (str_starts_with($heroFilm->cover, 'http') ? $heroFilm->cover : asset('storage/' . $heroFilm->cover))
+        : ($heroFilm->thumbnail
+            ? (str_starts_with($heroFilm->thumbnail, 'http') ? $heroFilm->thumbnail : asset('storage/' . $heroFilm->thumbnail))
+            : 'https://picsum.photos/seed/' . $heroFilm->id . '/1920/1080');
+@endphp
 <section class="sv-hero">
     <div class="sv-hero-bg">
-        <img src="{{ $heroFilm->thumbnail }}" alt="{{ $heroFilm->title }}">
-    </div>
+        <img src="{{ $heroCover }}" alt="{{ $heroFilm->title }}">    </div>
     <div class="sv-hero-content">
         <h1 class="sv-hero-title">{{ $heroFilm->title }}</h1>
         <div class="sv-hero-meta">

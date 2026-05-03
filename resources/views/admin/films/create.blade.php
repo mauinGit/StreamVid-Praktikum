@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.films.store') }}">
+    <form method="POST" action="{{ route('admin.films.store') }}" enctype="multipart/form-data">
         @csrf
         @include('admin.films._form')
         <button type="submit" class="sv-btn sv-btn-primary" style="margin-top:8px;">💾 Simpan Film</button>

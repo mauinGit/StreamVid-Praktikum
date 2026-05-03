@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.films.update', $film) }}">
+    <form method="POST" action="{{ route('admin.films.update', $film) }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         @include('admin.films._form', ['film' => $film])
         <button type="submit" class="sv-btn sv-btn-primary" style="margin-top:8px;">💾 Update Film</button>

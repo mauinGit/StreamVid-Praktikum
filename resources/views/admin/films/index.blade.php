@@ -26,7 +26,7 @@
         <tbody>
         @forelse($films as $film)
             <tr>
-                <td><img src="{{ $film->thumbnail }}" style="width:50px;height:75px;object-fit:cover;border-radius:6px;"></td>
+                <td><img src="{{ $film->thumbnail ? (str_starts_with($film->thumbnail, 'http') ? $film->thumbnail : asset('storage/' . $film->thumbnail)) : 'https://picsum.photos/seed/'.$film->id.'/50/75' }}" style="width:50px;height:75px;object-fit:cover;border-radius:6px;"></td>
                 <td style="font-weight:600;color:white;">{{ $film->title }}</td>
                 <td><span class="admin-badge admin-badge-info">{{ $film->genre_list }}</span></td>
                 <td>{{ $film->release_year }}</td>

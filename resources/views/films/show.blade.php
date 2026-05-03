@@ -2,10 +2,16 @@
 @section('content')
 
 {{-- Film Detail Hero --}}
+@php
+    $detailCover = $film->cover
+        ? (str_starts_with($film->cover, 'http') ? $film->cover : asset('storage/' . $film->cover))
+        : ($film->thumbnail
+            ? (str_starts_with($film->thumbnail, 'http') ? $film->thumbnail : asset('storage/' . $film->thumbnail))
+            : 'https://picsum.photos/seed/' . $film->id . '/1920/1080');
+@endphp
 <section class="sv-hero" style="height:70vh;min-height:500px;">
     <div class="sv-hero-bg">
-        <img src="{{ $film->thumbnail }}" alt="{{ $film->title }}">
-    </div>
+        <img src="{{ $detailCover }}" alt="{{ $film->title }}">    </div>
     <div class="sv-hero-content" style="max-width:700px;">
         <h1 class="sv-hero-title">{{ $film->title }}</h1>
         <div class="sv-hero-meta">

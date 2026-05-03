@@ -16,6 +16,7 @@ class Film extends Model
         'duration',
         'release_year',
         'thumbnail',
+        'cover',
         'video_url',
         'views_count',
         'is_featured',

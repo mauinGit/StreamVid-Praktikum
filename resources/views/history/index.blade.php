@@ -15,7 +15,7 @@
         <div style="display:flex;flex-direction:column;gap:12px;">
             @foreach($histories as $history)
             <a href="{{ route('films.show', $history->film) }}" style="text-decoration:none;color:inherit;display:flex;gap:20px;padding:16px;background:var(--sv-bg-card);border:1px solid var(--sv-border);border-radius:12px;transition:all 0.2s;align-items:center;" onmouseover="this.style.borderColor='var(--sv-accent)';this.style.background='var(--sv-bg-elevated)'" onmouseout="this.style.borderColor='var(--sv-border)';this.style.background='var(--sv-bg-card)'">
-                <img src="{{ $history->film->thumbnail }}" alt="{{ $history->film->title }}" style="width:80px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0;">
+                <img src="{{ $history->film->thumbnail ? (str_starts_with($history->film->thumbnail, 'http') ? $history->film->thumbnail : asset('storage/' . $history->film->thumbnail)) : 'https://picsum.photos/seed/'.$history->film->id.'/80/120' }}" alt="{{ $history->film->title }}" style="width:80px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0;">
                 <div style="flex:1;min-width:0;">
                     <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:6px;">{{ $history->film->title }}</h3>
                     <p style="font-size:0.85rem;color:var(--sv-text-muted);margin-bottom:4px;">{{ $history->film->genre_list }} • {{ $history->film->duration_formatted }}</p>

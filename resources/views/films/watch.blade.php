@@ -3,12 +3,27 @@
 <div class="sv-mt-nav" style="padding:20px 48px;">
     {{-- Video Player --}}
     <div style="position:relative;width:100%;max-width:1200px;margin:0 auto;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-        <iframe
-            src="{{ $film->video_url }}"
-            style="width:100%;height:100%;border:none;"
-            allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
+        @if(str_contains($film->video_url, 'youtube.com/embed') || str_contains($film->video_url, 'youtu.be'))
+            {{-- YouTube Embed (may be blocked on localhost) --}}
+            <iframe
+                src="{{ $film->video_url }}"
+                style="width:100%;height:100%;border:none;"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            ></iframe>
+        @else
+            {{-- HTML5 Video Player (direct URLs) --}}
+            <video
+                controls
+                autoplay
+                style="width:100%;height:100%;object-fit:contain;"
+                controlsList="nodownload"
+            >
+                <source src="{{ $film->video_url }}" type="video/mp4">
+                <source src="{{ $film->video_url }}" type="video/webm">
+                Browser Anda tidak mendukung video player.
+            </video>
+        @endif
     </div>
 
     {{-- Film Info --}}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,8 @@
     <title>{{ $title ?? 'StreamVid' }} - Streaming Film</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
@@ -16,8 +18,8 @@
             --sv-bg-secondary: #141414;
             --sv-bg-card: #1a1a2e;
             --sv-bg-elevated: #1e1e30;
-            --sv-accent: #e50914;
-            --sv-accent-hover: #f40612;
+            --sv-accent: #FF5C00;
+            --sv-accent-hover: #FB923C;
             --sv-accent-glow: rgba(229, 9, 20, 0.3);
             --sv-text-primary: #ffffff;
             --sv-text-secondary: #a3a3a3;
@@ -26,7 +28,11 @@
             --sv-glass: rgba(255, 255, 255, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -49,7 +55,7 @@
             align-items: center;
             justify-content: space-between;
             transition: background-color 0.3s ease;
-            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
         }
 
         .sv-navbar.scrolled {
@@ -134,22 +140,22 @@
         .sv-btn-outline {
             background: transparent;
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .sv-btn-outline:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .sv-btn-ghost {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             backdrop-filter: blur(10px);
         }
 
         .sv-btn-ghost:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .sv-btn-sm {
@@ -183,7 +189,7 @@
 
         .sv-dropdown-trigger:hover {
             color: white;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .sv-dropdown-avatar {
@@ -209,10 +215,10 @@
             border-radius: 8px;
             padding: 8px;
             display: none;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        .sv-dropdown:hover .sv-dropdown-menu {
+        .sv-dropdown-menu.open {
             display: block;
         }
 
@@ -236,7 +242,7 @@
 
         .sv-dropdown-menu a:hover,
         .sv-dropdown-menu button:hover {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
         }
 
@@ -265,7 +271,7 @@
         .sv-film-card:hover {
             transform: scale(1.08);
             z-index: 10;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
         }
 
         .sv-film-card img {
@@ -280,7 +286,7 @@
             left: 0;
             right: 0;
             padding: 20px 14px 14px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -342,7 +348,9 @@
             padding-bottom: 10px;
         }
 
-        .sv-scroll-row::-webkit-scrollbar { display: none; }
+        .sv-scroll-row::-webkit-scrollbar {
+            display: none;
+        }
 
         .sv-scroll-row .sv-film-card {
             flex: 0 0 200px;
@@ -382,8 +390,8 @@
             right: 0;
             bottom: 0;
             background:
-                linear-gradient(to right, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.4) 50%, transparent 100%),
-                linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.3) 40%, transparent 70%);
+                linear-gradient(to right, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.4) 50%, transparent 100%),
+                linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0.3) 40%, transparent 70%);
         }
 
         .sv-hero-content {
@@ -475,7 +483,9 @@
             list-style: none;
         }
 
-        .sv-footer-links li { margin-bottom: 10px; }
+        .sv-footer-links li {
+            margin-bottom: 10px;
+        }
 
         .sv-footer-links a {
             color: var(--sv-text-muted);
@@ -484,7 +494,9 @@
             transition: color 0.2s;
         }
 
-        .sv-footer-links a:hover { color: white; }
+        .sv-footer-links a:hover {
+            color: white;
+        }
 
         .sv-footer-bottom {
             border-top: 1px solid var(--sv-border);
@@ -521,12 +533,22 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(-10px); }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
         }
 
         /* ===== PAGINATION ===== */
@@ -537,7 +559,8 @@
             margin-top: 32px;
         }
 
-        .sv-pagination a, .sv-pagination span {
+        .sv-pagination a,
+        .sv-pagination span {
             padding: 8px 14px;
             border-radius: 6px;
             font-size: 0.85rem;
@@ -619,35 +642,94 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .sv-film-grid { grid-template-columns: repeat(4, 1fr); }
-            .sv-section { padding: 0 24px; }
-            .sv-navbar { padding: 0 24px; }
-            .sv-hero { padding: 0 24px 60px; }
-            .sv-hero-title { font-size: 2.5rem; }
-            .sv-footer { padding: 40px 24px 20px; }
+            .sv-film-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .sv-section {
+                padding: 0 24px;
+            }
+
+            .sv-navbar {
+                padding: 0 24px;
+            }
+
+            .sv-hero {
+                padding: 0 24px 60px;
+            }
+
+            .sv-hero-title {
+                font-size: 2.5rem;
+            }
+
+            .sv-footer {
+                padding: 40px 24px 20px;
+            }
         }
 
         @media (max-width: 768px) {
-            .sv-film-grid { grid-template-columns: repeat(3, 1fr); }
-            .sv-hero { height: 70vh; min-height: 500px; }
-            .sv-hero-title { font-size: 2rem; }
-            .sv-navbar-links { display: none; }
-            .sv-footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .sv-film-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .sv-hero {
+                height: 70vh;
+                min-height: 500px;
+            }
+
+            .sv-hero-title {
+                font-size: 2rem;
+            }
+
+            .sv-navbar-links {
+                display: none;
+            }
+
+            .sv-footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
         }
 
         @media (max-width: 480px) {
-            .sv-film-grid { grid-template-columns: repeat(2, 1fr); }
-            .sv-hero-title { font-size: 1.6rem; }
-            .sv-section { padding: 0 16px; }
-            .sv-navbar { padding: 0 16px; }
-            .sv-hero { padding: 0 16px 40px; }
+            .sv-film-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sv-hero-title {
+                font-size: 1.6rem;
+            }
+
+            .sv-section {
+                padding: 0 16px;
+            }
+
+            .sv-navbar {
+                padding: 0 16px;
+            }
+
+            .sv-hero {
+                padding: 0 16px 40px;
+            }
         }
 
         /* ===== UTILITY ===== */
-        .sv-container { max-width: 1400px; margin: 0 auto; }
-        .sv-mt-nav { margin-top: 68px; }
-        .sv-text-accent { color: var(--sv-accent); }
-        .sv-text-muted { color: var(--sv-text-muted); }
+        .sv-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sv-mt-nav {
+            margin-top: 68px;
+        }
+
+        .sv-text-accent {
+            color: var(--sv-accent);
+        }
+
+        .sv-text-muted {
+            color: var(--sv-text-muted);
+        }
 
         /* ===== LOADING SPINNER ===== */
         .sv-spinner {
@@ -660,13 +742,15 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .sv-loading-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10,10,10,0.9);
+            background: rgba(10, 10, 10, 0.9);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -676,6 +760,7 @@
         }
     </style>
 </head>
+
 <body>
     {{-- Flash Messages --}}
     @if(session('success'))
@@ -691,11 +776,14 @@
             <a href="{{ route('home') }}" class="sv-navbar-brand">StreamVid</a>
             <ul class="sv-navbar-links">
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-                <li><a href="{{ route('films.index') }}" class="{{ request()->routeIs('films.*') ? 'active' : '' }}">Films</a></li>
+                <li><a href="{{ route('films.index') }}"
+                        class="{{ request()->routeIs('films.*') ? 'active' : '' }}">Films</a></li>
                 @auth
                     @if(!auth()->user()->isAdmin())
-                        <li><a href="{{ route('mylist.index') }}" class="{{ request()->routeIs('mylist.*') ? 'active' : '' }}">My List</a></li>
-                        <li><a href="{{ route('history.index') }}" class="{{ request()->routeIs('history.*') ? 'active' : '' }}">History</a></li>
+                        <li><a href="{{ route('mylist.index') }}"
+                                class="{{ request()->routeIs('mylist.*') ? 'active' : '' }}">My List</a></li>
+                        <li><a href="{{ route('history.index') }}"
+                                class="{{ request()->routeIs('history.*') ? 'active' : '' }}">History</a></li>
                     @endif
                 @endauth
             </ul>
@@ -706,11 +794,12 @@
                 <a href="{{ route('login') }}" class="sv-btn sv-btn-ghost sv-btn-sm">Login</a>
                 <a href="{{ route('register') }}" class="sv-btn sv-btn-primary sv-btn-sm">Sign Up</a>
             @else
-                <div class="sv-dropdown">
-                    <button class="sv-dropdown-trigger">
+                <div class="sv-dropdown" id="user-dropdown">
+                    <button class="sv-dropdown-trigger" onclick="toggleDropdown(event)">
                         <div class="sv-dropdown-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
-                        <span>{{ auth()->user()->name }}</span>
-                        <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M1 1l4 4 4-4"/></svg>
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
+                            <path d="M1 1l4 4 4-4" />
+                        </svg>
                     </button>
                     <div class="sv-dropdown-menu">
                         @if(auth()->user()->isAdmin())
@@ -744,7 +833,8 @@
         <div class="sv-footer-grid">
             <div>
                 <div class="sv-footer-brand">STREAMVID</div>
-                <p class="sv-footer-desc">Platform streaming film terbaik dengan koleksi film terlengkap. Nikmati ribuan film berkualitas tinggi kapan saja, di mana saja.</p>
+                <p class="sv-footer-desc">Platform streaming film terbaik dengan koleksi film terlengkap. Nikmati ribuan
+                    film berkualitas tinggi kapan saja, di mana saja.</p>
             </div>
             <div>
                 <h4 class="sv-footer-title">Navigation</h4>
@@ -782,7 +872,7 @@
 
     <script>
         // Navbar scroll effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
@@ -795,8 +885,24 @@
         setTimeout(() => {
             document.querySelectorAll('.sv-flash').forEach(el => el.remove());
         }, 4000);
+
+        // Click-based dropdown toggle
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            const menu = document.querySelector('#user-dropdown .sv-dropdown-menu');
+            if (menu) menu.classList.toggle('open');
+        }
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                const menu = dropdown.querySelector('.sv-dropdown-menu');
+                if (menu) menu.classList.remove('open');
+            }
+        });
     </script>
 
     @stack('scripts')
 </body>
+
 </html>
