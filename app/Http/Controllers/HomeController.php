@@ -7,35 +7,32 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Hero film - random featured film
-        $heroFilm = Film::where('is_featured', true)->inRandomOrder()->first();
-
-        // Featured films
-        $featuredFilms = Film::where('is_featured', true)
+        // Hero films - 3 random featured films untuk carousel
+        $heroFilms = Film::where('is_featured', true)
             ->inRandomOrder()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
-        // Trending films (by views)
+        // Fallback: kalau featured film kurang dari 3, ambil dari semua film
+        if ($heroFilms->count() < 3) {
+            $heroFilms = Film::inRandomOrder()->limit(3)->get();
+        }
+
+        // Movie Terbaru (newest by created_at)
+        $newestFilms = Film::orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Trending Saat Ini (by views_count)
         $trendingFilms = Film::orderBy('views_count', 'desc')
             ->limit(10)
             ->get();
 
-        // All genres for catalog sections
-        $allFilms = Film::all();
-        $genres = $allFilms->pluck('genre')->flatten()->unique()->values();
+        // Semua Film (paginated)
+        $allFilms = Film::orderBy('created_at', 'desc')->paginate(18);
 
-        // Films by genre (random)
-        $filmsByGenre = [];
-        foreach ($genres->take(4) as $genre) {
-            $filmsByGenre[$genre] = Film::whereJsonContains('genre', $genre)
-                ->inRandomOrder()
-                ->limit(10)
-                ->get();
-        }
-
-        return view('home', compact('heroFilm', 'featuredFilms', 'trendingFilms', 'filmsByGenre'));
+        return view('home', compact('heroFilms', 'newestFilms', 'trendingFilms', 'allFilms'));
     }
 }

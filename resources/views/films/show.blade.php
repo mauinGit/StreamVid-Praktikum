@@ -52,7 +52,7 @@
     <h2 class="sv-section-title">
         <span class="sv-accent-bar"></span> Film Serupa
     </h2>
-    <div class="sv-film-grid" style="grid-template-columns:repeat(5,1fr);">
+    <div class="sv-scroll-row">
         @foreach($recommendations as $rec)
             @include('partials.film-card', ['film' => $rec])
         @endforeach

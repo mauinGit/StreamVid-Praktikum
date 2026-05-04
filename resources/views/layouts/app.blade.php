@@ -139,13 +139,14 @@
 
         .sv-btn-outline {
             background: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FB923C;
+            border: 1px solid #FF5C00;
         }
 
         .sv-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: #FF5C00;
+            border-color: #FF5C00;
+            color: white;
         }
 
         .sv-btn-ghost {
@@ -363,8 +364,8 @@
             height: 85vh;
             min-height: 600px;
             display: flex;
-            align-items: flex-end;
-            padding: 0 48px 80px;
+            align-items: center;
+            padding: 0 48px;
             overflow: hidden;
         }
 
@@ -773,7 +774,9 @@
     {{-- Navbar --}}
     <nav class="sv-navbar" id="navbar">
         <div style="display:flex;align-items:center;gap:40px;">
-            <a href="{{ route('home') }}" class="sv-navbar-brand">StreamVid</a>
+            <a href="{{ route('home') }}" class="sv-navbar-brand">
+                <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 160px; height: 40px;">
+            </a>
             <ul class="sv-navbar-links">
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
                 <li><a href="{{ route('films.index') }}"
@@ -796,7 +799,13 @@
             @else
                 <div class="sv-dropdown" id="user-dropdown">
                     <button class="sv-dropdown-trigger" onclick="toggleDropdown(event)">
-                        <div class="sv-dropdown-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                        <div class="sv-dropdown-avatar">
+                            @if(auth()->user()->profile_photo)
+                                <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+                            @else
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            @endif
+                        </div>
                         <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
                             <path d="M1 1l4 4 4-4" />
                         </svg>
@@ -832,7 +841,7 @@
     <footer class="sv-footer">
         <div class="sv-footer-grid">
             <div>
-                <div class="sv-footer-brand">STREAMVID</div>
+                <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 240px; height: 60px;">
                 <p class="sv-footer-desc">Platform streaming film terbaik dengan koleksi film terlengkap. Nikmati ribuan
                     film berkualitas tinggi kapan saja, di mana saja.</p>
             </div>

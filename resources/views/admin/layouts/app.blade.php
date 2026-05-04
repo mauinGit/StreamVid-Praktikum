@@ -13,8 +13,8 @@
             --sv-bg-secondary: #141414;
             --sv-bg-card: #1a1a2e;
             --sv-bg-elevated: #1e1e30;
-            --sv-accent: #e50914;
-            --sv-accent-hover: #f40612;
+            --sv-accent: #FF5C00;
+            --sv-accent-hover: #FB923C;
             --sv-text-primary: #ffffff;
             --sv-text-secondary: #a3a3a3;
             --sv-text-muted: #737373;
@@ -87,7 +87,7 @@
     @endif
 
     <aside class="admin-sidebar">
-        <div class="admin-sidebar-brand">STREAMVID <span>ADMIN</span></div>
+        <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 200px; height: 50px; margin-left: 24px; margin-bottom: 16px;">
         <ul class="admin-nav">
             <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">📊 Dashboard</a></li>
             <li><a href="{{ route('admin.films.index') }}" class="{{ request()->routeIs('admin.films.*') ? 'active' : '' }}">🎬 Film</a></li>

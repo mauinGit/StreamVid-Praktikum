@@ -26,13 +26,21 @@ class FilmController extends Controller
             $query->where('release_year', $request->year);
         }
 
-        $films = $query->orderBy('created_at', 'desc')->paginate(10);
+        // 6 columns x 3 rows = 18 per page
+        $films = $query->orderBy('created_at', 'desc')->paginate(18);
 
         // Get all unique genres for filter
         $allGenres = Film::all()->pluck('genre')->flatten()->unique()->sort()->values();
         $years = Film::select('release_year')->distinct()->orderBy('release_year', 'desc')->pluck('release_year');
 
-        return view('films.index', compact('films', 'allGenres', 'years'));
+        // Hero film for films catalog - based on selected genre or random
+        if ($request->filled('genre')) {
+            $heroFilm = Film::whereJsonContains('genre', $request->genre)->inRandomOrder()->first();
+        } else {
+            $heroFilm = Film::inRandomOrder()->first();
+        }
+
+        return view('films.index', compact('films', 'allGenres', 'years', 'heroFilm'));
     }
 
     public function show(Film $film)
@@ -48,15 +56,15 @@ class FilmController extends Controller
                 }
             })
             ->inRandomOrder()
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         // If not enough genre-based recommendations, fill with popular
-        if ($recommendations->count() < 5) {
+        if ($recommendations->count() < 10) {
             $moreFilms = Film::where('id', '!=', $film->id)
                 ->whereNotIn('id', $recommendations->pluck('id'))
                 ->orderBy('views_count', 'desc')
-                ->limit(5 - $recommendations->count())
+                ->limit(10 - $recommendations->count())
                 ->get();
             $recommendations = $recommendations->merge($moreFilms);
         }

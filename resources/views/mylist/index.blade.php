@@ -12,7 +12,7 @@
             <a href="{{ route('films.index') }}" class="sv-btn sv-btn-primary">Jelajahi Film</a>
         </div>
     @else
-        <div class="sv-film-grid">
+        <div class="sv-scroll-row">
             @foreach($myList as $item)
                 <div style="position:relative;">
                     @include('partials.film-card', ['film' => $item->film])
