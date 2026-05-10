@@ -89,17 +89,17 @@
     <aside class="admin-sidebar">
         <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 200px; height: 50px; margin-left: 24px; margin-bottom: 16px;">
         <ul class="admin-nav">
-            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">📊 Dashboard</a></li>
-            <li><a href="{{ route('admin.films.index') }}" class="{{ request()->routeIs('admin.films.*') ? 'active' : '' }}">🎬 Film</a></li>
-            <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">👥 Users</a></li>
-            <li><a href="{{ route('admin.subscriptions.index') }}" class="{{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">💳 Subscriptions</a></li>
-            <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">📄 Reports</a></li>
+            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+            <li><a href="{{ route('admin.films.index') }}" class="{{ request()->routeIs('admin.films.*') ? 'active' : '' }}">Film</a></li>
+            <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Users</a></li>
+            <li><a href="{{ route('admin.subscriptions.index') }}" class="{{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">Subscriptions</a></li>
+            <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">Reports</a></li>
             <div class="admin-nav-divider"></div>
-            <li><a href="{{ route('home') }}">🏠 Ke Website</a></li>
+            <li><a href="{{ route('home') }}">Ke Website</a></li>
             <li>
                 <form method="POST" action="{{ route('logout') }}" style="margin:0;">
                     @csrf
-                    <a href="#" onclick="this.closest('form').submit();return false;">🚪 Logout</a>
+                    <a href="#" onclick="this.closest('form').submit();return false;">Logout</a>
                 </form>
             </li>
         </ul>

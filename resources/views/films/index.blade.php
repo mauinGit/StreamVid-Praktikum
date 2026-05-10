@@ -40,7 +40,7 @@
     </h1>
 
     {{-- Search & Filter --}}
-    <form method="GET" action="{{ route('films.index') }}" style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;">
+    <form method="GET" action="{{ route('films.index') }}" style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content: flex-start;">
         <input type="text" name="search" class="sv-input" placeholder="🔍 Cari film..." value="{{ request('search') }}" style="max-width:300px;">
         <select name="genre" class="sv-input" style="max-width:180px;">
             <option value="">Semua Genre</option>
@@ -48,14 +48,8 @@
                 <option value="{{ $genre }}" {{ request('genre') == $genre ? 'selected' : '' }}>{{ $genre }}</option>
             @endforeach
         </select>
-        <select name="year" class="sv-input" style="max-width:140px;">
-            <option value="">Semua Tahun</option>
-            @foreach($years as $year)
-                <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-            @endforeach
-        </select>
         <button type="submit" class="sv-btn sv-btn-primary">Filter</button>
-        @if(request()->hasAny(['search', 'genre', 'year']))
+        @if(request()->hasAny(['search', 'genre']))
             <a href="{{ route('films.index') }}" class="sv-btn sv-btn-ghost">Reset</a>
         @endif
     </form>
