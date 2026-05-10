@@ -1,26 +1,21 @@
 [phases.setup]
-nixPkgs = [
-    'php83',
-    'php83Extensions.pdo_mysql',
-    'php83Extensions.mbstring',
-    'php83Extensions.xml',
-    'php83Extensions.curl',
-    'php83Extensions.openssl',
-    'php83Extensions.tokenizer',
-    'php83Extensions.fileinfo',
-    'php83Extensions.gd',
-    'nodejs_20',
-    'npm-9_x'
-]
+nixPkgs = ["php82", "php82Extensions.pdo", "php82Extensions.pdo_mysql", 
+           "php82Extensions.mbstring", "php82Extensions.xml", 
+           "php82Extensions.curl", "php82Extensions.zip",
+           "php82Extensions.gd",        # untuk image processing
+           "php82Packages.composer",
+           "nginx",                      # TAMBAHKAN INI
+           "gettext"]                    # untuk envsubst
 
 [phases.install]
-cmd = './railway-build.sh'
+cmds = ["composer install --no-dev --optimize-autoloader"]
 
 [phases.build]
-# Empty or minimal, we already did everything in install phase
-cmd = 'echo "Build phase complete"'
+cmds = [
+    "php artisan config:clear",
+    "php artisan view:clear",
+    "chmod +x /app/start.sh"
+]
 
-# CRITICAL: NO custom start command!!!
-# Railway akan otomatis menggunakan PHP-FPM + Nginx
-# Hanya perlu migrate yang dijalankan di start
-# Kita gunakan prestart script
+[start]
+cmd = "bash /app/start.sh"
