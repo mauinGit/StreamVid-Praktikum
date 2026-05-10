@@ -35,7 +35,7 @@ fi
 
 # 3. Cache config untuk performa
 php artisan config:cache
-php artisan route:cache
+# php artisan route:cache (Dihapus sementara agar tidak crash saat ada closure)
 
 # 4. Substitusi PORT di nginx config
 envsubst '$PORT' < /app/nginx.conf > /etc/nginx/conf.d/default.conf
