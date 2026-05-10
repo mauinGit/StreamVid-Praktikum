@@ -645,40 +645,15 @@
             padding-right: 36px;
         }
 
-        /* ===== MOBILE MENU ===== */
-        .sv-hamburger {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .sv-mobile-menu {
-            position: fixed;
-            top: 68px;
-            left: 0;
-            right: 0;
-            background: var(--sv-bg-primary);
-            border-bottom: 1px solid var(--sv-border);
-            padding: 20px;
-            display: none;
-            flex-direction: column;
-            gap: 16px;
-            z-index: 999;
-        }
-        .sv-mobile-menu.open {
-            display: flex;
-        }
-        .sv-mobile-menu a {
-            color: var(--sv-text-primary);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
+        .mobile-only {
+            display: none !important;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
+            .mobile-only {
+                display: block !important;
+            }
             .sv-film-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
             }
@@ -693,9 +668,6 @@
 
             .sv-navbar-links {
                 display: none;
-            }
-            .sv-hamburger {
-                display: block;
             }
             .mobile-hide {
                 display: none !important;
@@ -835,7 +807,6 @@
     {{-- Navbar --}}
     <nav class="sv-navbar" id="navbar">
         <div style="display:flex;align-items:center;gap:40px;">
-            <button class="sv-hamburger" onclick="toggleMobileMenu()">☰</button>
             <a href="{{ route('home') }}" class="sv-navbar-brand">
                 <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 160px; height: 40px;">
             </a>
@@ -873,11 +844,16 @@
                         </svg>
                     </button>
                     <div class="sv-dropdown-menu">
+                        <a href="{{ route('home') }}" class="mobile-only">🏠 Home</a>
+                        <a href="{{ route('films.index') }}" class="mobile-only">🎬 Film</a>
+                        <div class="sv-dropdown-divider mobile-only"></div>
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
                             <div class="sv-dropdown-divider"></div>
                         @else
-                            <a href="{{ route('subscription.index') }}">💳 Subscription</a>
+                            @if(!auth()->user()->hasActiveSubscription())
+                                <a href="{{ route('subscription.index') }}">💳 Subscription</a>
+                            @endif
                             <a href="{{ route('mylist.index') }}">📌 My List</a>
                             <a href="{{ route('history.index') }}">🕐 History</a>
                             <div class="sv-dropdown-divider"></div>
@@ -892,25 +868,6 @@
             @endguest
         </div>
     </nav>
-    
-    {{-- Mobile Menu --}}
-    <div class="sv-mobile-menu" id="mobile-menu">
-        <a href="{{ route('home') }}">Home</a>
-        <a href="{{ route('films.index') }}">Film</a>
-        @auth
-            @if(!auth()->user()->isAdmin())
-                <a href="{{ route('mylist.index') }}">My List</a>
-                <a href="{{ route('history.index') }}">History</a>
-                @if(!auth()->user()->hasActiveSubscription())
-                    <a href="{{ route('subscription.index') }}">Subscription</a>
-                @endif
-            @endif
-        @endauth
-        @guest
-            <a href="{{ route('login') }}">Login</a>
-            <a href="{{ route('register') }}">Sign Up</a>
-        @endguest
-    </div>
 
     {{-- Main Content --}}
     <main>
@@ -987,11 +944,6 @@
                 if (menu) menu.classList.remove('open');
             }
         });
-        
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('open');
-        }
     </script>
 
     @stack('scripts')
