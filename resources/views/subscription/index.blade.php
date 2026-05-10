@@ -13,10 +13,30 @@
         </div>
     @endif
 
-    {{-- Pricing Cards --}}
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto;">
+    <style>
+        .sv-mobile-tabs { display: none; }
+        @media (max-width: 1024px) {
+            .sv-mobile-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+            .sv-pricing-grid { grid-template-columns: 1fr !important; }
+            .sv-pricing-card { display: none; }
+            .sv-pricing-card.active-mobile { display: block; }
+            .sv-tab-btn.active-tab { background: var(--sv-accent); color: white; border-color: var(--sv-accent); }
+        }
+    </style>
+
+    {{-- Mobile Tab Picker --}}
+    <div class="sv-mobile-tabs">
         @foreach($packages as $pkg)
-        <div style="
+            <button onclick="showPackage({{ $loop->index }})" class="sv-btn sv-btn-outline sv-tab-btn {{ isset($pkg['popular']) ? 'active-tab' : '' }}" id="tab-btn-{{ $loop->index }}">
+                {{ $pkg['label'] }}
+            </button>
+        @endforeach
+    </div>
+
+    {{-- Pricing Cards --}}
+    <div class="sv-pricing-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto;">
+        @foreach($packages as $pkg)
+        <div class="sv-pricing-card {{ isset($pkg['popular']) ? 'active-mobile' : '' }}" id="pkg-card-{{ $loop->index }}" style="
             background: var(--sv-bg-card);
             border: 1px solid {{ isset($pkg['popular']) ? 'var(--sv-accent)' : 'var(--sv-border)' }};
             border-radius: 16px;
@@ -55,4 +75,17 @@
         @endforeach
     </div>
 </div>
+
+<script>
+    function showPackage(index) {
+        // Only run if mobile view
+        if (window.innerWidth > 1024) return;
+        
+        document.querySelectorAll('.sv-pricing-card').forEach(card => card.classList.remove('active-mobile'));
+        document.querySelectorAll('.sv-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+        
+        document.getElementById('pkg-card-' + index).classList.add('active-mobile');
+        document.getElementById('tab-btn-' + index).classList.add('active-tab');
+    }
+</script>
 @endsection

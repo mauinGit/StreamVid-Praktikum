@@ -119,7 +119,7 @@
         <span class="sv-accent-bar"></span> SEMUA FILM
     </h2>
     @if($allFilms->isNotEmpty())
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+        <div class="sv-all-films-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
             @foreach($allFilms as $film)
                 @include('partials.film-card', ['film' => $film])
             @endforeach

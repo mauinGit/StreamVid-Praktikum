@@ -7,7 +7,7 @@
 
     <div style="display:flex;flex-direction:column;gap:24px;width:100%;">
         {{-- Baris 1: Profile & Informasi Akun --}}
-        <div style="display:grid;grid-template-columns:300px 1fr;gap:32px;">
+        <div class="sv-profile-grid-row1" style="display:grid;grid-template-columns:300px 1fr;gap:32px;">
             {{-- Profile Photo --}}
             <div>
                 <div class="admin-card" style="background:var(--sv-bg-card);border:1px solid var(--sv-border);border-radius:16px;padding:28px;text-align:center;height:100%;">
@@ -62,7 +62,7 @@
         </div>
 
         {{-- Baris 2: Status Langganan & Hapus Akun --}}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div class="sv-profile-grid-row2" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
             {{-- Subscription Status --}}
             <div>
                 <div style="background:var(--sv-bg-card);border:1px solid var(--sv-border);border-radius:16px;padding:28px;height:100%;">

@@ -648,73 +648,88 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .sv-film-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr) !important;
             }
 
             .sv-section {
-                padding: 0 24px;
+                padding: 0 16px;
             }
 
             .sv-navbar {
-                padding: 0 24px;
-            }
-
-            .sv-hero {
-                padding: 0 24px 60px;
-            }
-
-            .sv-hero-title {
-                font-size: 2.5rem;
-            }
-
-            .sv-footer {
-                padding: 40px 24px 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sv-film-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .sv-hero {
-                height: 70vh;
-                min-height: 500px;
-            }
-
-            .sv-hero-title {
-                font-size: 2rem;
+                padding: 0 16px;
             }
 
             .sv-navbar-links {
                 display: none;
             }
 
-            .sv-footer-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .sv-film-grid {
-                grid-template-columns: repeat(2, 1fr);
+            /* Hero adjustments */
+            .sv-hero {
+                height: 40vh;
+                min-height: 250px;
+                padding: 0 16px 40px;
             }
 
             .sv-hero-title {
-                font-size: 1.6rem;
+                font-size: 1.4rem;
+                margin-bottom: 8px;
             }
 
-            .sv-section {
-                padding: 0 16px;
+            .sv-hero-meta {
+                font-size: 0.7rem;
+                margin-bottom: 8px;
             }
 
-            .sv-navbar {
-                padding: 0 16px;
+            .sv-hero-description {
+                font-size: 0.8rem;
+                margin-bottom: 16px;
+                -webkit-line-clamp: 2;
             }
 
-            .sv-hero {
-                padding: 0 16px 40px;
+            .sv-hero-actions .sv-btn {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            /* Scroll Row and Grids (3 items) */
+            .sv-scroll-row > * {
+                flex: 0 0 calc((100% - 24px) / 3);
+            }
+            .sv-all-films-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 12px !important;
+            }
+
+            /* Film card font reduction */
+            .sv-film-card-title {
+                font-size: 0.75rem;
+            }
+            .sv-film-card-meta {
+                font-size: 0.65rem;
+            }
+
+            /* Footer */
+            .sv-footer {
+                padding: 32px 16px 16px;
+                margin-top: 40px;
+            }
+
+            .sv-footer-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .sv-footer-brand {
+                font-size: 1.2rem;
+            }
+            .sv-footer-desc, .sv-footer-links a {
+                font-size: 0.75rem;
+            }
+
+            /* Profile Page */
+            .sv-profile-grid-row1, .sv-profile-grid-row2 {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
             }
         }
 
