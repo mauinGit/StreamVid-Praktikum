@@ -33,6 +33,19 @@ Route::get('/setup-database', function () {
     }
 });
 
+Route::get('/debug-storage', function () {
+    $symlink = public_path('storage');
+    $target  = storage_path('app/public');
+
+    return response()->json([
+        'symlink_exists'    => is_link($symlink),
+        'symlink_target'    => is_link($symlink) ? readlink($symlink) : 'TIDAK ADA',
+        'target_dir_exists' => is_dir($target),
+        'files_in_storage'  => is_dir($target) ? scandir($target) : 'FOLDER KOSONG/TIDAK ADA',
+        'app_url'           => config('app.url'),
+    ]);
+});
+
 // ==========================================
 // AUTHENTICATED USER ROUTES
 // ==========================================
