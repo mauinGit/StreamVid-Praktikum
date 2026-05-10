@@ -888,6 +888,12 @@
                 <ul class="sv-footer-links" style="display:flex;gap:16px;flex-wrap:wrap;">
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('films.index') }}">Film</a></li>
+                    @auth
+                        @if(!auth()->user()->isAdmin())
+                            <li><a href="{{ route('mylist.index') }}">My List</a></li>
+                            <li><a href="{{ route('history.index') }}">History</a></li>
+                        @endif
+                    @endauth
                     <li><a href="#">FAQ</a></li>
                 </ul>
             </div>

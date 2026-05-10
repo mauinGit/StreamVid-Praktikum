@@ -6,7 +6,11 @@
         .watch-wrapper { border-radius: 0 !important; box-shadow: none !important; background: var(--sv-bg-primary) !important; }
         .watch-info { padding: 16px !important; background: var(--sv-bg-primary) !important; }
         .watch-title { font-size: 1.2rem !important; }
+        .watch-desc { -webkit-line-clamp: unset !important; display: block !important; }
+        .mobile-zoom-btn { display: flex !important; }
+        .desktop-fs-btn { display: none !important; }
     }
+    .mobile-zoom-btn { display: none; }
 </style>
 
 <div class="sv-mt-nav watch-nav-padding" style="padding:20px 48px;">
@@ -84,14 +88,16 @@
 
                     <div style="flex:1;"></div>
 
-                    {{-- Quality badge --}}
-                    <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:11px;padding:2px 8px;border-radius:4px;">HD</span>
+                    {{-- Landscape Zoom (Mobile Only) --}}
+                    <button class="mobile-zoom-btn" onclick="toggleLandscape()" style="background:none;border:none;cursor:pointer;padding:6px;color:white;align-items:center;border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'" title="Zoom / Landscape">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/></svg>
+                    </button>
 
                     {{-- Playback speed --}}
                     <button id="speedBtn" onclick="changeSpeed()" style="background:none;border:none;cursor:pointer;padding:6px 8px;color:rgba(255,255,255,0.8);font-size:12px;font-weight:500;border-radius:6px;min-width:36px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'" title="Kecepatan">1×</button>
 
                     {{-- Fullscreen --}}
-                    <button onclick="toggleFullscreen()" style="background:none;border:none;cursor:pointer;padding:6px;color:white;display:flex;align-items:center;border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'" title="Layar penuh (F)">
+                    <button class="desktop-fs-btn" onclick="toggleFullscreen()" style="background:none;border:none;cursor:pointer;padding:6px;color:white;display:flex;align-items:center;border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'" title="Layar penuh (F)">
                         <svg id="iconFsEnter" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         <svg id="iconFsExit" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
                     </button>
@@ -113,7 +119,7 @@
                     </div>
                 </div>
             </div>
-            <p style="margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.7;max-width:700px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{ $film->description }}</p>
+            <p class="watch-desc" style="margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.7;max-width:700px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{ $film->description }}</p>
         </div>
 
     </div>
@@ -160,6 +166,17 @@
     function setVolume(v) { video.volume=v/100; video.muted=v==0; iconVol.style.display=v>0?'block':'none'; iconMute.style.display=v==0?'block':'none'; }
     function changeSpeed() { speedIdx=(speedIdx+1)%speeds.length; video.playbackRate=speeds[speedIdx]; speedBtn.textContent=speeds[speedIdx]+'×'; }
     function toggleFullscreen() { document.fullscreenElement ? document.exitFullscreen() : wrapper.requestFullscreen(); }
+    function toggleLandscape() {
+        if (!document.fullscreenElement) {
+            wrapper.requestFullscreen().then(() => {
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(e => console.log(e));
+                }
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
     function fmt(s) { if(isNaN(s)) return '0:00'; const m=Math.floor(s/60),sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
 
     video.addEventListener('play',  () => { iconPlay.style.display='none'; iconPause.style.display='block'; bigPlayIcon.style.opacity='0'; });
