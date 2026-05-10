@@ -1,5 +1,17 @@
 @extends('admin.layouts.app')
 @section('admin-content')
+<style>
+    .dashboard-grid-stats { grid-template-columns: repeat(3, 1fr); }
+    .dashboard-grid-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .dashboard-grid-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    
+    @media (max-width: 1024px) {
+        .dashboard-grid-stats { grid-template-columns: 1fr !important; }
+        .dashboard-grid-charts { grid-template-columns: 1fr !important; }
+        .dashboard-grid-tables { grid-template-columns: 1fr !important; }
+    }
+</style>
+
 <div class="admin-header">
     <h1>Dashboard</h1>
     <div class="admin-header-meta">
@@ -9,7 +21,7 @@
 </div>
 
 {{-- Quick Stats --}}
-<div class="admin-stat-grid" style="grid-template-columns:repeat(3,1fr);">
+<div class="admin-stat-grid dashboard-grid-stats">
     <div class="admin-stat">
         <div class="admin-stat-value">{{ number_format($activeSubscribers) }}</div>
         <div class="admin-stat-label">Subscriber Aktif</div>
@@ -27,7 +39,7 @@
     </div>
 </div>
 
-<div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px;">
+<div class="dashboard-grid-charts">
     {{-- Monthly User Growth Chart --}}
     <div class="admin-card">
         <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;">Pertumbuhan User (12 Bulan)</h3>
@@ -57,7 +69,7 @@
     </div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+<div class="dashboard-grid-tables">
     {{-- Recent Payments --}}
     <div class="admin-card">
         <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;">Transaksi Terbaru</h3>

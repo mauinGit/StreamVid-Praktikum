@@ -23,7 +23,7 @@
         * { margin:0;padding:0;box-sizing:border-box; }
         body { font-family:'Inter',sans-serif;background:var(--sv-bg-primary);color:var(--sv-text-primary);min-height:100vh;display:flex; }
 
-        .admin-sidebar { width:260px;background:var(--sv-bg-secondary);border-right:1px solid var(--sv-border);padding:24px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:100; }
+        .admin-sidebar { width:260px;background:var(--sv-bg-secondary);border-right:1px solid var(--sv-border);padding:24px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:100; transition:transform 0.3s ease; }
         .admin-sidebar-brand { padding:0 24px 28px;font-size:1.4rem;font-weight:900;color:var(--sv-accent);display:flex;align-items:center;gap:10px; }
         .admin-sidebar-brand span { font-size:0.7rem;color:var(--sv-text-muted);font-weight:500;background:rgba(229,9,20,0.15);padding:2px 8px;border-radius:4px; }
         .admin-nav { list-style:none; }
@@ -79,6 +79,22 @@
         .sv-pagination a { color:var(--sv-text-secondary);background:var(--sv-bg-card);border:1px solid var(--sv-border); }
         .sv-pagination a:hover { background:var(--sv-accent);color:white; }
         .sv-pagination .active span { background:var(--sv-accent);color:white; }
+        
+        .admin-mobile-hamburger { display:none; position:fixed; top:10px; left:10px; background:var(--sv-bg-secondary); border:1px solid var(--sv-border); border-radius:6px; color:white; font-size:1.5rem; cursor:pointer; padding:6px 12px; z-index:90; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
+        .admin-sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:95; opacity:0; transition:opacity 0.3s; }
+        .admin-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; border-radius: 8px; }
+
+        @media (max-width: 1024px) {
+            .admin-sidebar { transform: translateX(-100%); }
+            .admin-sidebar.show { transform: translateX(0); }
+            .admin-content { margin-left: 0; padding: 60px 16px 16px; min-height: 100vh; }
+            .admin-mobile-hamburger { display: block; }
+            .admin-header { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 20px; }
+            .admin-header h1 { font-size: 1.3rem; }
+            .admin-header-meta { font-size: 0.8rem; }
+            .admin-card { padding: 16px; }
+            .sv-btn { padding: 8px 16px; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
@@ -86,7 +102,13 @@
         <div class="sv-flash sv-flash-success">{{ session('success') }}</div>
     @endif
 
-    <aside class="admin-sidebar">
+    {{-- Mobile Hamburger --}}
+    <button class="admin-mobile-hamburger" onclick="toggleAdminSidebar()">☰</button>
+
+    {{-- Sidebar Overlay --}}
+    <div class="admin-sidebar-overlay" id="adminSidebarOverlay" onclick="toggleAdminSidebar()"></div>
+
+    <aside class="admin-sidebar" id="adminSidebar">
         <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 200px; height: 50px; margin-left: 24px; margin-bottom: 16px;">
         <ul class="admin-nav">
             <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
@@ -109,7 +131,37 @@
         @yield('admin-content')
     </main>
 
-    <script>setTimeout(()=>{document.querySelectorAll('.sv-flash').forEach(el=>el.remove())},4000);</script>
+    <script>
+        setTimeout(()=>{document.querySelectorAll('.sv-flash').forEach(el=>el.remove())},4000);
+        function toggleAdminSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('adminSidebarOverlay');
+            sidebar.classList.toggle('show');
+            if(sidebar.classList.contains('show')) {
+                overlay.style.display = 'block';
+                setTimeout(() => overlay.style.opacity = '1', 10);
+                document.body.style.overflow = 'hidden';
+            } else {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 300);
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // Wrap tables for responsive scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+            if(window.innerWidth <= 1024) {
+                document.querySelectorAll('.admin-table').forEach(table => {
+                    if(!table.parentElement.classList.contains('admin-table-wrapper')) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'admin-table-wrapper';
+                        table.parentNode.insertBefore(wrapper, table);
+                        wrapper.appendChild(table);
+                    }
+                });
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
