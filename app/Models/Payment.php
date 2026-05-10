@@ -16,6 +16,13 @@ class Payment extends Model
         'method',
         'amount',
         'status',
+        'payment_proof',
+        'admin_notes',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'created_at' => 'datetime',
     ];
 
     public function user()
@@ -40,6 +47,26 @@ class Payment extends Model
             'e_wallet' => 'E-Wallet',
             'qris' => 'QRIS',
             default => $this->method,
+        };
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match($this->status) {
+            'pending' => 'Menunggu Verifikasi',
+            'success' => 'Berhasil',
+            'failed' => 'Ditolak',
+            default => $this->status,
+        };
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return match($this->status) {
+            'pending' => 'warning',
+            'success' => 'success',
+            'failed' => 'danger',
+            default => 'info',
         };
     }
 }

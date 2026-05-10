@@ -34,7 +34,8 @@ Route::middleware('auth')->group(function () {
 
     // Payment
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
-    Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/receipt', [PaymentController::class, 'receipt'])->name('payment.receipt');
+    Route::get('/payment/history', [PaymentController::class, 'history'])->name('payment.history');
 
     // My List
     Route::get('/my-list', [MyListController::class, 'index'])->name('mylist.index');
@@ -69,8 +70,14 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
 
-    // Subscription Management
+    // Subscription / Transaction Management
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::post('/subscriptions/{payment}/approve', [AdminSubscriptionController::class, 'approve'])->name('subscriptions.approve');
+    Route::post('/subscriptions/{payment}/reject', [AdminSubscriptionController::class, 'reject'])->name('subscriptions.reject');
+
+    // Film featured toggle
+    Route::post('/films/{film}/toggle-featured', [AdminFilmController::class, 'toggleFeatured'])->name('films.toggle-featured');
+    Route::get('/films-search-json', [AdminFilmController::class, 'searchJson'])->name('films.search-json');
 
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

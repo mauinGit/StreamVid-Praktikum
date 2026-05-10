@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('admin-content')
 <div class="admin-header">
-    <h1>✏️ Edit Film</h1>
+    <h1>Edit Film</h1>
     <a href="{{ route('admin.films.index') }}" class="sv-btn sv-btn-outline">← Kembali</a>
 </div>
 
@@ -17,7 +17,7 @@
     <form method="POST" action="{{ route('admin.films.update', $film) }}" enctype="multipart/form-data">
         @csrf @method('PUT')
         @include('admin.films._form', ['film' => $film])
-        <button type="submit" class="sv-btn sv-btn-primary" style="margin-top:8px;">💾 Update Film</button>
+        <button type="submit" class="sv-btn sv-btn-primary" style="margin-top:8px;">Update Film</button>
     </form>
 </div>
 @endsection

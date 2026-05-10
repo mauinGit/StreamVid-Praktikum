@@ -18,8 +18,9 @@ class FilmController extends Controller
         }
 
         $films = $query->latest()->paginate(10);
+        $featuredFilms = Film::where('is_featured', true)->limit(3)->get();
 
-        return view('admin.films.index', compact('films'));
+        return view('admin.films.index', compact('films', 'featuredFilms'));
     }
 
     public function create()
@@ -38,15 +39,8 @@ class FilmController extends Controller
             'release_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'video_file' => 'nullable|mimes:mp4,webm,ogg|max:102400',
-            'video_url' => 'nullable|string',
-            'is_featured' => 'boolean',
+            'video_file' => 'required|mimes:mp4,webm,ogg|max:102400',
         ]);
-
-        // Must have either video file or video URL
-        if (!$request->hasFile('video_file') && !$request->filled('video_url')) {
-            return back()->withErrors(['video_url' => 'Upload file video atau masukkan URL video.'])->withInput();
-        }
 
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
@@ -63,8 +57,6 @@ class FilmController extends Controller
             $validated['video_url'] = $request->file('video_file')->store('films/videos', 'public');
         }
         unset($validated['video_file']);
-
-        $validated['is_featured'] = $request->has('is_featured');
 
         Film::create($validated);
 
@@ -89,8 +81,6 @@ class FilmController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'video_file' => 'nullable|mimes:mp4,webm,ogg|max:102400',
-            'video_url' => 'nullable|string',
-            'is_featured' => 'boolean',
         ]);
 
         // Handle thumbnail upload
@@ -115,17 +105,12 @@ class FilmController extends Controller
 
         // Handle video upload
         if ($request->hasFile('video_file')) {
-            // Delete old video if it was uploaded
             if ($film->video_url && !str_starts_with($film->video_url, 'http') && Storage::disk('public')->exists($film->video_url)) {
                 Storage::disk('public')->delete($film->video_url);
             }
             $validated['video_url'] = $request->file('video_file')->store('films/videos', 'public');
-        } elseif (!$request->filled('video_url')) {
-            unset($validated['video_url']);
         }
         unset($validated['video_file']);
-
-        $validated['is_featured'] = $request->has('is_featured');
 
         $film->update($validated);
 
@@ -146,5 +131,38 @@ class FilmController extends Controller
 
         return redirect()->route('admin.films.index')
             ->with('success', 'Film berhasil dihapus!');
+    }
+
+    public function toggleFeatured(Film $film)
+    {
+        // If turning ON featured, check max 3
+        if (!$film->is_featured) {
+            $featuredCount = Film::where('is_featured', true)->count();
+            if ($featuredCount >= 3) {
+                return back()->with('success', 'Maksimal 3 film featured. Hapus salah satu terlebih dahulu.');
+            }
+        }
+
+        $film->update(['is_featured' => !$film->is_featured]);
+
+        return back()->with('success', $film->is_featured ? 'Film ditambahkan ke Hero Carousel.' : 'Film dihapus dari Hero Carousel.');
+    }
+
+    public function searchJson(Request $request)
+    {
+        $search = $request->input('q', '');
+        $films = Film::where('title', 'like', '%' . $search . '%')
+            ->where('is_featured', false)
+            ->select('id', 'title', 'thumbnail', 'release_year')
+            ->limit(10)
+            ->get()
+            ->map(function ($film) {
+                $film->thumbnail_url = $film->thumbnail
+                    ? (str_starts_with($film->thumbnail, 'http') ? $film->thumbnail : asset('storage/' . $film->thumbnail))
+                    : 'https://picsum.photos/seed/'.$film->id.'/50/75';
+                return $film;
+            });
+
+        return response()->json($films);
     }
 }

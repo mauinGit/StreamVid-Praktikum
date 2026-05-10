@@ -83,7 +83,7 @@
 </head>
 <body>
     @if(session('success'))
-        <div class="sv-flash sv-flash-success">✓ {{ session('success') }}</div>
+        <div class="sv-flash sv-flash-success">{{ session('success') }}</div>
     @endif
 
     <aside class="admin-sidebar">
