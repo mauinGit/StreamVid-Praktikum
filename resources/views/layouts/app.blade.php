@@ -645,6 +645,38 @@
             padding-right: 36px;
         }
 
+        /* ===== MOBILE MENU ===== */
+        .sv-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .sv-mobile-menu {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            background: var(--sv-bg-primary);
+            border-bottom: 1px solid var(--sv-border);
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 999;
+        }
+        .sv-mobile-menu.open {
+            display: flex;
+        }
+        .sv-mobile-menu a {
+            color: var(--sv-text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .sv-film-grid {
@@ -661,6 +693,16 @@
 
             .sv-navbar-links {
                 display: none;
+            }
+            .sv-hamburger {
+                display: block;
+            }
+            .mobile-hide {
+                display: none !important;
+            }
+            .sv-footer-logo {
+                width: 150px !important;
+                height: 38px !important;
             }
 
             /* Hero adjustments */
@@ -793,6 +835,7 @@
     {{-- Navbar --}}
     <nav class="sv-navbar" id="navbar">
         <div style="display:flex;align-items:center;gap:40px;">
+            <button class="sv-hamburger" onclick="toggleMobileMenu()">☰</button>
             <a href="{{ route('home') }}" class="sv-navbar-brand">
                 <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 160px; height: 40px;">
             </a>
@@ -849,6 +892,25 @@
             @endguest
         </div>
     </nav>
+    
+    {{-- Mobile Menu --}}
+    <div class="sv-mobile-menu" id="mobile-menu">
+        <a href="{{ route('home') }}">Home</a>
+        <a href="{{ route('films.index') }}">Film</a>
+        @auth
+            @if(!auth()->user()->isAdmin())
+                <a href="{{ route('mylist.index') }}">My List</a>
+                <a href="{{ route('history.index') }}">History</a>
+                @if(!auth()->user()->hasActiveSubscription())
+                    <a href="{{ route('subscription.index') }}">Subscription</a>
+                @endif
+            @endif
+        @endauth
+        @guest
+            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('register') }}">Sign Up</a>
+        @endguest
+    </div>
 
     {{-- Main Content --}}
     <main>
@@ -860,21 +922,19 @@
     <footer class="sv-footer">
         <div class="sv-footer-grid">
             <div>
-                <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 240px; height: 60px;">
-                <p class="sv-footer-desc">Platform streaming film terbaik dengan koleksi film terlengkap. Nikmati ribuan
+                <img src="{{ asset('img/logo.png') }}" alt="StreamVid" class="sv-footer-logo" style="width: 240px; height: 60px;">
+                <p class="sv-footer-desc mobile-hide">Platform streaming film terbaik dengan koleksi film terlengkap. Nikmati ribuan
                     film berkualitas tinggi kapan saja, di mana saja.</p>
             </div>
             <div>
-                <h4 class="sv-footer-title">Navigation</h4>
-                <ul class="sv-footer-links">
+                <h4 class="sv-footer-title mobile-hide">Navigation</h4>
+                <ul class="sv-footer-links" style="display:flex;gap:16px;flex-wrap:wrap;">
                     <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('films.index') }}">Films</a></li>
-                    @auth
-                        <li><a href="{{ route('subscription.index') }}">Subscription</a></li>
-                    @endauth
+                    <li><a href="{{ route('films.index') }}">Film</a></li>
+                    <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
-            <div>
+            <div class="mobile-hide">
                 <h4 class="sv-footer-title">Genre</h4>
                 <ul class="sv-footer-links">
                     <li><a href="{{ route('films.index', ['genre' => 'Action']) }}">Action</a></li>
@@ -883,10 +943,9 @@
                     <li><a href="{{ route('films.index', ['genre' => 'Horror']) }}">Horror</a></li>
                 </ul>
             </div>
-            <div>
+            <div class="mobile-hide">
                 <h4 class="sv-footer-title">Support</h4>
                 <ul class="sv-footer-links">
-                    <li><a href="#">FAQ</a></li>
                     <li><a href="#">Help Center</a></li>
                     <li><a href="#">Terms of Use</a></li>
                     <li><a href="#">Privacy</a></li>
@@ -928,6 +987,11 @@
                 if (menu) menu.classList.remove('open');
             }
         });
+        
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
     </script>
 
     @stack('scripts')

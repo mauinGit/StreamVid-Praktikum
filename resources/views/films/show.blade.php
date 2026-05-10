@@ -9,7 +9,13 @@
             ? (str_starts_with($film->thumbnail, 'http') ? $film->thumbnail : asset('storage/' . $film->thumbnail))
             : 'https://picsum.photos/seed/' . $film->id . '/1920/1080');
 @endphp
-<section class="sv-hero" style="height:70vh;min-height:500px;">
+<style>
+    .hero-detail { height: 70vh; min-height: 500px; }
+    @media (max-width: 1024px) {
+        .hero-detail { height: 40vh !important; min-height: 250px !important; }
+    }
+</style>
+<section class="sv-hero hero-detail">
     <div class="sv-hero-bg">
         <img src="{{ $detailCover }}" alt="{{ $film->title }}">    </div>
     <div class="sv-hero-content" style="max-width:700px;">

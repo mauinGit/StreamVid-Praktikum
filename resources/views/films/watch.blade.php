@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
-<div class="sv-mt-nav" style="padding:20px 48px;">
+<style>
+    @media (max-width: 1024px) {
+        .watch-nav-padding { padding: 0 !important; }
+        .watch-wrapper { border-radius: 0 !important; box-shadow: none !important; background: var(--sv-bg-primary) !important; }
+        .watch-info { padding: 16px !important; background: var(--sv-bg-primary) !important; }
+        .watch-title { font-size: 1.2rem !important; }
+    }
+</style>
+
+<div class="sv-mt-nav watch-nav-padding" style="padding:20px 48px;">
     @php
         $isUploadedVideo = $film->video_url && !str_starts_with($film->video_url, 'http');
         $videoSrc = $isUploadedVideo
@@ -9,7 +18,7 @@
     @endphp
 
     {{-- Player Wrapper --}}
-    <div style="max-width:1200px;margin:0 auto;background:#0d0d0d;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+    <div class="watch-wrapper" style="max-width:1200px;margin:0 auto;background:#0d0d0d;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
 
         {{-- Video --}}
         <div id="videoWrapper" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;">
@@ -92,10 +101,10 @@
         </div>
 
         {{-- Film Info --}}
-        <div style="padding:20px 24px 24px;background:#111;">
+        <div class="watch-info" style="padding:20px 24px 24px;background:#111;">
             <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;">
                 <div>
-                    <h1 style="margin:0 0 10px;font-size:20px;font-weight:500;color:#fff;letter-spacing:-0.3px;">{{ $film->title }}</h1>
+                    <h1 class="watch-title" style="margin:0 0 10px;font-size:20px;font-weight:500;color:#fff;letter-spacing:-0.3px;">{{ $film->title }}</h1>
                     <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
                         <span style="background:#e50914;color:#fff;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;">{{ $film->release_year }}</span>
                         <span style="color:rgba(255,255,255,0.4);font-size:13px;">{{ $film->duration_formatted }}</span>
