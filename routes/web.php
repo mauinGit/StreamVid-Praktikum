@@ -6,6 +6,7 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MyListController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\WatchController;
 use App\Http\Controllers\WatchHistoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -37,17 +38,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/receipt', [PaymentController::class, 'receipt'])->name('payment.receipt');
     Route::get('/payment/history', [PaymentController::class, 'history'])->name('payment.history');
 
-    // My List
-    Route::get('/my-list', [MyListController::class, 'index'])->name('mylist.index');
+    // Koleksi Saya (replaces My List + History)
+    Route::get('/koleksi', [CollectionController::class, 'index'])->name('collection.index');
+
+    // My List toggle (keep for add/remove functionality)
+    Route::get('/my-list', [CollectionController::class, 'index'])->name('mylist.index');
     Route::post('/my-list/toggle/{film}', [MyListController::class, 'toggle'])->name('mylist.toggle');
+
+    // Watch History (alias to collection)
+    Route::get('/history', [CollectionController::class, 'index'])->name('history.index');
 
     // Watch (requires active subscription)
     Route::get('/watch/{film}', [WatchController::class, 'play'])
         ->middleware('subscription')
         ->name('films.watch');
-
-    // Watch History
-    Route::get('/history', [WatchHistoryController::class, 'index'])->name('history.index');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -33,14 +33,17 @@ class FilmController extends Controller
         $allGenres = Film::all()->pluck('genre')->flatten()->unique()->sort()->values();
         $years = Film::select('release_year')->distinct()->orderBy('release_year', 'desc')->pluck('release_year');
 
-        // Hero film for films catalog - based on selected genre or random
-        if ($request->filled('genre')) {
-            $heroFilm = Film::whereJsonContains('genre', $request->genre)->inRandomOrder()->first();
-        } else {
-            $heroFilm = Film::inRandomOrder()->first();
+        // 3 random genre sections
+        $genreSections = [];
+        $randomGenres = $allGenres->shuffle()->take(3);
+        foreach ($randomGenres as $genre) {
+            $genreSections[] = [
+                'genre' => $genre,
+                'films' => Film::whereJsonContains('genre', $genre)->inRandomOrder()->limit(12)->get(),
+            ];
         }
 
-        return view('films.index', compact('films', 'allGenres', 'years', 'heroFilm'));
+        return view('films.index', compact('films', 'allGenres', 'years', 'genreSections'));
     }
 
     public function show(Film $film)

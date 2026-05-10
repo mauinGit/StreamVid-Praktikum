@@ -35,7 +35,7 @@
 
     <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:20px;">
         <span class="sv-accent-bar"></span>
-        Film
+        Semua Film
     </h1>
 
     {{-- Film Grid: 6 columns --}}
@@ -58,4 +58,21 @@
         @endif
     @endif
 </div>
+
+{{-- Random Genre Sections --}}
+@foreach($genreSections as $section)
+    @if($section['films']->isNotEmpty())
+    <section class="sv-section">
+        <h2 class="sv-section-title">
+            <span class="sv-accent-bar"></span> {{ $section['genre'] }}
+        </h2>
+        <div class="sv-scroll-row">
+            @foreach($section['films'] as $film)
+                @include('partials.film-card', ['film' => $film])
+            @endforeach
+        </div>
+    </section>
+    @endif
+@endforeach
+
 @endsection

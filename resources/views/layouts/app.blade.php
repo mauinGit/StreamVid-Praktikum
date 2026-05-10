@@ -816,10 +816,8 @@
                         class="{{ request()->routeIs('films.*') ? 'active' : '' }}">Films</a></li>
                 @auth
                     @if(!auth()->user()->isAdmin())
-                        <li><a href="{{ route('mylist.index') }}"
-                                class="{{ request()->routeIs('mylist.*') ? 'active' : '' }}">My List</a></li>
-                        <li><a href="{{ route('history.index') }}"
-                                class="{{ request()->routeIs('history.*') ? 'active' : '' }}">History</a></li>
+                        <li><a href="{{ route('collection.index') }}"
+                                class="{{ request()->routeIs('collection.*') || request()->routeIs('mylist.*') || request()->routeIs('history.*') ? 'active' : '' }}">Koleksi Saya</a></li>
                     @endif
                 @endauth
             </ul>
@@ -844,8 +842,7 @@
                         </svg>
                     </button>
                     <div class="sv-dropdown-menu">
-                        <a href="{{ route('home') }}" class="mobile-only">🏠 Home</a>
-                        <a href="{{ route('films.index') }}" class="mobile-only">🎬 Film</a>
+                        <a href="{{ route('collection.index') }}" class="mobile-only">📂 Koleksi Saya</a>
                         <div class="sv-dropdown-divider mobile-only"></div>
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
@@ -854,8 +851,7 @@
                             @if(!auth()->user()->hasActiveSubscription())
                                 <a href="{{ route('subscription.index') }}">💳 Subscription</a>
                             @endif
-                            <a href="{{ route('mylist.index') }}">📌 My List</a>
-                            <a href="{{ route('history.index') }}">🕐 History</a>
+                            <a href="{{ route('collection.index') }}">📂 Koleksi Saya</a>
                             <div class="sv-dropdown-divider"></div>
                             <a href="{{ route('profile.edit') }}">👤 Profile</a>
                         @endif
@@ -890,8 +886,7 @@
                     <li><a href="{{ route('films.index') }}">Film</a></li>
                     @auth
                         @if(!auth()->user()->isAdmin())
-                            <li><a href="{{ route('mylist.index') }}">My List</a></li>
-                            <li><a href="{{ route('history.index') }}">History</a></li>
+                            <li><a href="{{ route('collection.index') }}">Koleksi Saya</a></li>
                         @endif
                     @endauth
                     <li><a href="#">FAQ</a></li>
