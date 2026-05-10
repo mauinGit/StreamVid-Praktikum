@@ -110,16 +110,16 @@
         <div class="watch-info" style="padding:20px 24px 24px;background:#111;">
             <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;">
                 <div>
-                    <h1 class="watch-title" style="margin:0 0 10px;font-size:20px;font-weight:500;color:#fff;letter-spacing:-0.3px;">{{ $film->title }}</h1>
+                    <h1 class="watch-title" style="margin:0 0 10px;font-size:26px;font-weight:600;color:#fff;letter-spacing:-0.3px;">{{ $film->title }}</h1>
                     <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
-                        <span style="background:#e50914;color:#fff;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;">{{ $film->release_year }}</span>
-                        <span style="color:rgba(255,255,255,0.4);font-size:13px;">{{ $film->duration_formatted }}</span>
-                        <span style="color:rgba(255,255,255,0.2);font-size:13px;">•</span>
-                        <span style="color:rgba(255,255,255,0.4);font-size:13px;">{{ $film->genre_list }}</span>
+                        <span style="background:#e50914;color:#fff;font-size:13px;font-weight:600;padding:3px 10px;border-radius:4px;">{{ $film->release_year }}</span>
+                        <span style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->duration_formatted }}</span>
+                        <span style="color:rgba(255,255,255,0.4);font-size:15px;">•</span>
+                        <span style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->genre_list }}</span>
                     </div>
                 </div>
             </div>
-            <p class="watch-desc" style="margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.7;max-width:700px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{ $film->description }}</p>
+            <p class="watch-desc" style="margin:16px 0 0;color:rgba(255,255,255,0.8);font-size:16px;line-height:1.7;max-width:800px;">{{ $film->description }}</p>
         </div>
 
     </div>

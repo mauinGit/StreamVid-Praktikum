@@ -20,24 +20,23 @@
             flex: 0 0 calc((100% - 24px) / 3) !important;
             max-width: calc((100% - 24px) / 3) !important;
         }
+        .sv-mt-nav-mobile {
+            padding: 24px 16px !important;
+        }
     }
 </style>
 
-<div class="sv-mt-nav" style="padding:40px 48px;">
+<div class="sv-mt-nav sv-mt-nav-mobile" style="padding:40px 48px;">
     {{-- Search & Filter --}}
     <form class="film-search-form" method="GET" action="{{ route('films.index') }}" style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content: flex-start;">
         <input type="text" name="search" class="sv-input film-search-input" placeholder="🔍 Cari film..." value="{{ request('search') }}" style="flex:1;">
         <button type="submit" class="sv-btn sv-btn-primary film-search-btn">Cari Film</button>
-        @if(request()->has('search') && request('search') != '')
-            <a href="{{ route('films.index') }}" class="sv-btn sv-btn-ghost">Reset</a>
-        @endif
     </form>
 
     @if(request()->has('search') && request('search') != '')
-        <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:20px;">
-            <span class="sv-accent-bar"></span>
-            Hasil Pencarian
-        </h1>
+        <h2 class="sv-section-title">
+            <span class="sv-accent-bar"></span> Hasil Pencarian
+        </h2>
 
         {{-- Film Grid: 6 columns --}}
         @if($films->isEmpty())

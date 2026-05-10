@@ -883,7 +883,7 @@
             </div>
             <div>
                 <h4 class="sv-footer-title mobile-hide">Navigation</h4>
-                <ul class="sv-footer-links sv-footer-nav-links" style="display:flex;flex-direction:column;gap:12px;">
+                <ul class="sv-footer-links sv-footer-nav-links">
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('films.index') }}">Film</a></li>
                     @auth
