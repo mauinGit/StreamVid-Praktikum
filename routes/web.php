@@ -46,6 +46,35 @@ Route::get('/debug-storage', function () {
     ]);
 });
 
+Route::get('/force-symlink', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+    
+    // Hapus apapun yang ada di public/storage (file, folder, symlink usang)
+    if (file_exists($link) || is_link($link)) {
+        if (is_dir($link) && !is_link($link)) {
+            \Illuminate\Support\Facades\File::deleteDirectory($link);
+        } else {
+            unlink($link);
+        }
+    }
+    
+    // Buat target direktori jika belum ada
+    if (!file_exists($target)) {
+        mkdir($target, 0775, true);
+    }
+    
+    // Buat symlink langsung dengan PHP
+    $success = symlink($target, $link);
+    
+    return response()->json([
+        'success' => $success,
+        'message' => $success ? 'Symlink berhasil dibuat!' : 'Gagal membuat symlink.',
+        'target' => $target,
+        'link' => $link
+    ]);
+});
+
 // ==========================================
 // AUTHENTICATED USER ROUTES
 // ==========================================
