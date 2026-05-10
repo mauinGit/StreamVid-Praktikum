@@ -26,35 +26,37 @@
 <div class="sv-mt-nav" style="padding:40px 48px;">
     {{-- Search & Filter --}}
     <form class="film-search-form" method="GET" action="{{ route('films.index') }}" style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content: flex-start;">
-        <input type="text" name="search" class="sv-input film-search-input" placeholder="🔍 Cari film..." value="{{ request('search') }}" style="max-width:300px;flex:1;">
+        <input type="text" name="search" class="sv-input film-search-input" placeholder="🔍 Cari film..." value="{{ request('search') }}" style="flex:1;">
         <button type="submit" class="sv-btn sv-btn-primary film-search-btn">Cari Film</button>
         @if(request()->has('search') && request('search') != '')
             <a href="{{ route('films.index') }}" class="sv-btn sv-btn-ghost">Reset</a>
         @endif
     </form>
 
-    <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:20px;">
-        <span class="sv-accent-bar"></span>
-        Semua Film
-    </h1>
+    @if(request()->has('search') && request('search') != '')
+        <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:20px;">
+            <span class="sv-accent-bar"></span>
+            Hasil Pencarian
+        </h1>
 
-    {{-- Film Grid: 6 columns --}}
-    @if($films->isEmpty())
-        <div style="text-align:center;padding:80px 0;">
-            <p style="font-size:1.2rem;color:var(--sv-text-muted);">Tidak ada film ditemukan.</p>
-        </div>
-    @else
-        <div class="sv-all-films-grid mobile-scroll-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
-            @foreach($films as $film)
-                @include('partials.film-card', ['film' => $film])
-            @endforeach
-        </div>
-
-        {{-- Pagination --}}
-        @if($films->hasPages())
-            <div class="sv-pagination">
-                {!! $films->withQueryString()->links('partials.pagination') !!}
+        {{-- Film Grid: 6 columns --}}
+        @if($films->isEmpty())
+            <div style="text-align:center;padding:80px 0;">
+                <p style="font-size:1.2rem;color:var(--sv-text-muted);">Tidak ada film ditemukan.</p>
             </div>
+        @else
+            <div class="sv-all-films-grid mobile-scroll-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+                @foreach($films as $film)
+                    @include('partials.film-card', ['film' => $film])
+                @endforeach
+            </div>
+
+            {{-- Pagination --}}
+            @if($films->hasPages())
+                <div class="sv-pagination">
+                    {!! $films->withQueryString()->links('partials.pagination') !!}
+                </div>
+            @endif
         @endif
     @endif
 </div>

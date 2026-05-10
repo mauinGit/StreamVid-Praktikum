@@ -12,7 +12,7 @@
 <style>
     .hero-detail { height: 70vh; min-height: 500px; }
     @media (max-width: 1024px) {
-        .hero-detail { height: 40vh !important; min-height: 250px !important; }
+        .hero-detail { height: 40vh !important; min-height: 250px !important; margin-top: 68px !important; }
     }
 </style>
 <section class="sv-hero hero-detail">

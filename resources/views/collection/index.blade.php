@@ -1,13 +1,9 @@
 @extends('layouts.app')
 @section('content')
-<div class="sv-mt-nav" style="padding:40px 48px;">
-    <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:40px;">
-        <span class="sv-accent-bar"></span> Koleksi Saya
-    </h1>
-</div>
+<div class="sv-mt-nav" style="padding-top:40px;"></div>
 
 {{-- Lanjutkan Tontonan --}}
-<section class="sv-section">
+<section class="sv-section" style="margin-top:0;">
     <h2 class="sv-section-title">
         <span class="sv-accent-bar"></span> Lanjutkan Tontonan
     </h2>
@@ -46,5 +42,19 @@
         </div>
     @endif
 </section>
+
+{{-- Rekomendasi Film Untuk Mu --}}
+@if($recommendations->isNotEmpty())
+<section class="sv-section">
+    <h2 class="sv-section-title">
+        <span class="sv-accent-bar"></span> Rekomendasi Film Untuk Mu
+    </h2>
+    <div class="sv-scroll-row">
+        @foreach($recommendations as $film)
+            @include('partials.film-card', ['film' => $film])
+        @endforeach
+    </div>
+</section>
+@endif
 
 @endsection

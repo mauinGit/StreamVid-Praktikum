@@ -672,6 +672,12 @@
             .mobile-hide {
                 display: none !important;
             }
+            .sv-footer-nav-links {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                gap: 16px !important;
+            }
             .sv-footer-logo {
                 width: 150px !important;
                 height: 38px !important;
@@ -842,19 +848,15 @@
                         </svg>
                     </button>
                     <div class="sv-dropdown-menu">
-                        <a href="{{ route('collection.index') }}" class="mobile-only">📂 Koleksi Saya</a>
-                        <div class="sv-dropdown-divider mobile-only"></div>
+                        <a href="{{ route('home') }}">🏠 Home</a>
+                        <a href="{{ route('films.index') }}">🎬 Film</a>
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
-                            <div class="sv-dropdown-divider"></div>
                         @else
-                            @if(!auth()->user()->hasActiveSubscription())
-                                <a href="{{ route('subscription.index') }}">💳 Subscription</a>
-                            @endif
                             <a href="{{ route('collection.index') }}">📂 Koleksi Saya</a>
-                            <div class="sv-dropdown-divider"></div>
-                            <a href="{{ route('profile.edit') }}">👤 Profile</a>
                         @endif
+                        <div class="sv-dropdown-divider"></div>
+                        <a href="{{ route('profile.edit') }}">👤 Profile</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit">🚪 Logout</button>
@@ -881,7 +883,7 @@
             </div>
             <div>
                 <h4 class="sv-footer-title mobile-hide">Navigation</h4>
-                <ul class="sv-footer-links" style="display:flex;gap:16px;flex-wrap:wrap;">
+                <ul class="sv-footer-links sv-footer-nav-links" style="display:flex;flex-direction:column;gap:12px;">
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('films.index') }}">Film</a></li>
                     @auth
