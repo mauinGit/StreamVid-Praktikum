@@ -18,19 +18,14 @@
 <section class="sv-hero hero-detail">
     <div class="sv-hero-bg">
         <img src="{{ $detailCover }}" alt="{{ $film->title }}">    </div>
-    <div class="sv-hero-content" style="max-width:700px;">
+    <div class="sv-hero-content">
         <h1 class="sv-hero-title">{{ $film->title }}</h1>
         <div class="sv-hero-meta">
             <span class="sv-badge">{{ $film->release_year }}</span>
-            <span>🕐 {{ $film->duration_formatted }}</span>
-            <span>👁 {{ number_format($film->views_count) }} views</span>
+            <span>{{ $film->duration_formatted }}</span>
+            <span>{{ $film->genre_list }}</span>
         </div>
-        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-            @foreach($film->genre as $g)
-                <span style="padding:4px 12px;background:rgba(255,255,255,0.1);border-radius:20px;font-size:0.8rem;color:var(--sv-text-secondary);">{{ $g }}</span>
-            @endforeach
-        </div>
-        <p class="sv-hero-description" style="-webkit-line-clamp:5;">{{ $film->description }}</p>
+        <p class="sv-hero-description">{{ $film->description }}</p>
         <div class="sv-hero-actions">
             @auth
                 @if(auth()->user()->hasActiveSubscription())

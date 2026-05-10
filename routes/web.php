@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 // ==========================================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');
+Route::view('/terms-and-privacy', 'terms')->name('terms');
 
 // ==========================================
 // AUTHENTICATED USER ROUTES

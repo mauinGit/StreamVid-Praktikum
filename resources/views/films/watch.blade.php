@@ -5,8 +5,10 @@
         .watch-nav-padding { padding: 0 !important; }
         .watch-wrapper { border-radius: 0 !important; box-shadow: none !important; background: var(--sv-bg-primary) !important; }
         .watch-info { padding: 16px !important; background: var(--sv-bg-primary) !important; }
-        .watch-title { font-size: 1.2rem !important; }
-        .watch-desc { -webkit-line-clamp: unset !important; display: block !important; }
+        .watch-title { font-size: 1.2rem !important; margin-bottom: 6px !important; }
+        .watch-desc { -webkit-line-clamp: unset !important; display: block !important; font-size: 13px !important; margin-top: 10px !important; }
+        .watch-meta-badge { font-size: 11px !important; padding: 2px 6px !important; }
+        .watch-meta-text { font-size: 13px !important; }
         .mobile-zoom-btn { display: flex !important; }
         .desktop-fs-btn { display: none !important; }
     }
@@ -112,14 +114,14 @@
                 <div>
                     <h1 class="watch-title" style="margin:0 0 10px;font-size:26px;font-weight:600;color:#fff;letter-spacing:-0.3px;">{{ $film->title }}</h1>
                     <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
-                        <span style="background:#e50914;color:#fff;font-size:13px;font-weight:600;padding:3px 10px;border-radius:4px;">{{ $film->release_year }}</span>
-                        <span style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->duration_formatted }}</span>
-                        <span style="color:rgba(255,255,255,0.4);font-size:15px;">•</span>
-                        <span style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->genre_list }}</span>
+                        <span class="watch-meta-badge" style="background:#e50914;color:#fff;font-size:13px;font-weight:600;padding:3px 10px;border-radius:4px;">{{ $film->release_year }}</span>
+                        <span class="watch-meta-text" style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->duration_formatted }}</span>
+                        <span class="watch-meta-text" style="color:rgba(255,255,255,0.4);font-size:15px;">•</span>
+                        <span class="watch-meta-text" style="color:rgba(255,255,255,0.7);font-size:15px;">{{ $film->genre_list }}</span>
                     </div>
                 </div>
             </div>
-            <p class="watch-desc" style="margin:16px 0 0;color:rgba(255,255,255,0.8);font-size:16px;line-height:1.7;max-width:800px;">{{ $film->description }}</p>
+            <p class="watch-desc" style="margin:16px 0 0;color:rgba(255,255,255,0.8);font-size:16px;line-height:1.7;">{{ $film->description }}</p>
         </div>
 
     </div>
