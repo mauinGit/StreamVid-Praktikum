@@ -353,8 +353,12 @@
             display: none;
         }
 
+        .sv-scroll-row > * {
+            flex: 0 0 calc((100% - 60px) / 6); /* Show exactly 6 items (5 gaps of 12px = 60px) */
+        }
         .sv-scroll-row .sv-film-card {
-            flex: 0 0 200px;
+            width: 100%;
+            height: 100%;
             aspect-ratio: 2/3;
         }
 

@@ -86,16 +86,18 @@
                         </div>
                         <form method="POST" action="{{ route('profile.cancel-subscription') }}" onsubmit="return confirm('Yakin ingin mencabut langganan? Akses menonton film akan dihentikan.')">
                             @csrf
-                            <button type="submit" class="sv-btn" style="width:100%;padding:12px;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.3);font-weight:600;">
+                            <button type="submit" class="sv-btn" style="width:100%;padding:12px;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.3);font-weight:600;margin-bottom:12px;">
                                 🚫 Cabut Langganan
                             </button>
                         </form>
                     @else
                         <div style="text-align:center;padding:20px 0;">
                             <p style="color:var(--sv-text-muted);margin-bottom:16px;">Anda belum berlangganan</p>
-                            <a href="{{ route('subscription.index') }}" class="sv-btn sv-btn-primary">Mulai Berlangganan</a>
+                            <a href="{{ route('subscription.index') }}" class="sv-btn sv-btn-primary" style="width:100%;margin-bottom:12px;">Mulai Berlangganan</a>
                         </div>
                     @endif
+                    
+                    <a href="{{ route('payment.history') }}" class="sv-btn sv-btn-outline" style="width:100%;text-align:center;display:block;">Riwayat Pemesanan</a>
                 </div>
             </div>
 

@@ -17,11 +17,11 @@
     </style>
 </head>
 <body>
-    <h1>💳 Laporan Subscriptions - StreamVid</h1>
+    <h1>Laporan Subscriptions - StreamVid</h1>
     <p class="meta">Tanggal: {{ date('d M Y H:i') }} | Total: {{ $data->count() }} subscriptions</p>
     <table>
         <thead>
-            <tr><th>No</th><th>User</th><th>Paket</th><th>Mulai</th><th>Berakhir</th><th>Status</th><th>Pembayaran</th></tr>
+            <tr><th>No</th><th>User</th><th>Paket</th><th>Mulai</th><th>Berakhir</th><th>Status</th><th>Pembayaran</th><th>Bukti Pembayaran</th></tr>
         </thead>
         <tbody>
         @foreach($data as $i => $sub)
@@ -33,6 +33,13 @@
                 <td>{{ $sub->end_date->format('d M Y') }}</td>
                 <td><span class="badge {{ $sub->status }}">{{ ucfirst($sub->status) }}</span></td>
                 <td>{{ $sub->payment ? 'Rp ' . number_format($sub->payment->amount, 0, ',', '.') : '-' }}</td>
+                <td>
+                    @if($sub->payment && $sub->payment->payment_proof)
+                        <a href="{{ asset('storage/' . $sub->payment->payment_proof) }}" target="_blank">Lihat Bukti</a>
+                    @else
+                        -
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>

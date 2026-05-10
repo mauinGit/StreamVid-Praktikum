@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <h1>📊 Laporan Users - StreamVid</h1>
+    <h1>Laporan Users - StreamVid</h1>
     <p class="meta">Tanggal: {{ date('d M Y H:i') }} | Total: {{ $data->count() }} users</p>
     <table>
         <thead>

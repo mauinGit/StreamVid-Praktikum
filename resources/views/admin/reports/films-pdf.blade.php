@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    <h1>🎬 Laporan Film - StreamVid</h1>
+    <h1>Laporan Film - StreamVid</h1>
     <p class="meta">Tanggal: {{ date('d M Y H:i') }} | Total: {{ $data->count() }} film</p>
     <table>
         <thead>
