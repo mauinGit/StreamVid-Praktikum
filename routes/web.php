@@ -75,6 +75,27 @@ Route::get('/force-symlink', function () {
     ]);
 });
 
+Route::get('/do-symlink', function () {
+    $output = [];
+    
+    // 1. Cek isi folder public
+    $output['ls_public_before'] = shell_exec('ls -la /app/public');
+    
+    // 2. Coba hapus
+    $output['rm_result'] = shell_exec('rm -rf /app/public/storage 2>&1');
+    
+    // 3. Coba buat symlink
+    $output['ln_result'] = shell_exec('ln -sfn /app/storage/app/public /app/public/storage 2>&1');
+    
+    // 4. Cek isi folder public setelahnya
+    $output['ls_public_after'] = shell_exec('ls -la /app/public');
+    
+    // 5. Cek isi storage target
+    $output['ls_target'] = shell_exec('ls -la /app/storage/app/public');
+    
+    return '<pre>' . print_r($output, true) . '</pre>';
+});
+
 // ==========================================
 // AUTHENTICATED USER ROUTES
 // ==========================================
@@ -97,6 +118,7 @@ Route::middleware('auth')->group(function () {
     // My List toggle (keep for add/remove functionality)
     Route::get('/my-list', [CollectionController::class, 'index'])->name('mylist.index');
     Route::post('/my-list/toggle/{film}', [MyListController::class, 'toggle'])->name('mylist.toggle');
+
 
     // Watch History (alias to collection)
     Route::get('/history', [CollectionController::class, 'index'])->name('history.index');
