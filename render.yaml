@@ -1,0 +1,9 @@
+[build]
+buildCommand = "chmod +x render-build.sh && ./render-build.sh"
+
+[start]
+startCommand = "php artisan serve --host=0.0.0.0 --port=$PORT"
+
+[environment]
+  PHP_VERSION = "8.3"
+  NODE_VERSION = "20"
