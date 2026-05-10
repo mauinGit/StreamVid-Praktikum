@@ -23,6 +23,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');
 Route::view('/terms-and-privacy', 'terms')->name('terms');
 
+Route::get('/setup-database', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return 'Database setup successful! <a href="/">Go to Home</a>';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
 // ==========================================
 // AUTHENTICATED USER ROUTES
 // ==========================================
