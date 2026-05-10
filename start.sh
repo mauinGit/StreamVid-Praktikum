@@ -17,17 +17,23 @@ chown -R www-data:www-data /app/storage 2>/dev/null || true
 
 # 2. Buat/perbarui symlink storage
 echo "Creating storage symlink..."
-php artisan storage:link --force
+
+# Hapus dulu apapun yang ada di public/storage (folder biasa atau symlink lama)
+# Ini penyebab utama php artisan storage:link gagal
+rm -rf /app/public/storage
+
+# Buat symlink manual langsung (lebih reliable daripada artisan di Railway)
+ln -sfn /app/storage/app/public /app/public/storage
 
 # Verifikasi symlink
 if [ -L /app/public/storage ]; then
-    echo "✓ Symlink created: $(readlink /app/public/storage)"
+    echo "✓ Symlink OK: $(readlink /app/public/storage)"
 else
-    echo "✗ WARNING: Symlink failed! Trying manual creation..."
-    ln -sfn /app/storage/app/public /app/public/storage
+    echo "✗ FATAL: Symlink gagal dibuat!"
+    exit 1
 fi
 
-# 3. Cache config untuk performa (opsional tapi direkomendasikan)
+# 3. Cache config untuk performa
 php artisan config:cache
 php artisan route:cache
 
