@@ -41,6 +41,12 @@
             color: var(--sv-text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
         }
 
         /* ===== NAVBAR ===== */

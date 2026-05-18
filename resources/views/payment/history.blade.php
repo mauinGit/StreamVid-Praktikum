@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="sv-mt-nav" style="padding:40px 48px; max-width: 900px; margin: 0 auto;">
+<div style="padding: 100px 48px 40px; max-width: 900px; margin: 0 auto; width: 100%;">
     <h1 class="sv-section-title" style="font-size:2rem;margin-bottom:32px;">
         <span class="sv-accent-bar"></span> Riwayat Pembayaran
     </h1>
