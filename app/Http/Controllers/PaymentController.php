@@ -37,7 +37,7 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'subscription_id' => $subscription->id,
             'invoice_id' => Payment::generateInvoiceId(),
-            'method' => $request->method,
+            'method' => $request->input('method'),
             'amount' => $price,
             'status' => 'pending',
             'payment_proof' => $proofPath,
