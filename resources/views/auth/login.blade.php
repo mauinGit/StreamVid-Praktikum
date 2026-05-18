@@ -18,6 +18,12 @@
             <p style="color: var(--sv-text-muted); font-size: 0.9rem; line-height: 1.5;">Selamat datang kembali!</p>
         </div>
 
+        @if(session('success'))
+            <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+                <p style="color: #22c55e; font-size: 0.85rem;">{{ session('success') }}</p>
+            </div>
+        @endif
+
         @if($errors->any())
             <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
                 @foreach($errors->all() as $error)
