@@ -119,16 +119,11 @@
         <span class="sv-accent-bar"></span> SEMUA FILM
     </h2>
     @if($allFilms->isNotEmpty())
-        <div class="sv-all-films-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+        <div class="sv-scroll-row">
             @foreach($allFilms as $film)
                 @include('partials.film-card', ['film' => $film])
             @endforeach
         </div>
-        @if($allFilms->hasPages())
-            <div class="sv-pagination">
-                {!! $allFilms->links('partials.pagination') !!}
-            </div>
-        @endif
     @else
         <p style="color:var(--sv-text-muted);text-align:center;padding:40px;">Belum ada film.</p>
     @endif

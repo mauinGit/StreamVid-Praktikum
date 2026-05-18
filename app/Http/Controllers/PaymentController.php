@@ -14,6 +14,14 @@ class PaymentController extends Controller
             'package' => 'required|in:basic,standard,premium',
             'method' => 'required|in:transfer_bank,e_wallet,qris',
             'payment_proof' => 'required|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ], [
+            'package.required' => 'Paket langganan wajib dipilih.',
+            'method.required' => 'Metode pembayaran wajib dipilih.',
+            'method.in' => 'Metode pembayaran tidak valid.',
+            'payment_proof.required' => 'Bukti pembayaran wajib diupload.',
+            'payment_proof.image' => 'File harus berupa gambar.',
+            'payment_proof.mimes' => 'Format gambar harus JPG, PNG, atau WebP.',
+            'payment_proof.max' => 'Ukuran file maksimal 4MB.',
         ]);
 
         $user = auth()->user();

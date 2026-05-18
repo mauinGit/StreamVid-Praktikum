@@ -32,6 +32,15 @@
         {{-- Payment Form --}}
         <form method="POST" action="{{ route('payment.process') }}" enctype="multipart/form-data" id="payment-form">
             @csrf
+
+            @if($errors->any())
+                <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px 16px;margin-bottom:20px;">
+                    @foreach($errors->all() as $error)
+                        <p style="color:#ef4444;font-size:0.85rem;">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
             <input type="hidden" name="package" value="{{ $package }}">
 
             {{-- Payment Method --}}

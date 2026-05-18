@@ -40,6 +40,21 @@ class FilmController extends Controller
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'video_file' => 'required|mimes:mp4,webm,ogg|max:102400',
+        ], [
+            'title.required' => 'Judul film wajib diisi.',
+            'description.required' => 'Deskripsi film wajib diisi.',
+            'genre.required' => 'Genre wajib dipilih minimal satu.',
+            'duration.required' => 'Durasi film wajib diisi.',
+            'duration.min' => 'Durasi film minimal 1 menit.',
+            'release_year.required' => 'Tahun rilis wajib diisi.',
+            'thumbnail.required' => 'Thumbnail (poster) wajib diupload.',
+            'thumbnail.image' => 'Thumbnail harus berupa file gambar.',
+            'thumbnail.max' => 'Ukuran thumbnail maksimal 2MB.',
+            'cover.image' => 'Cover harus berupa file gambar.',
+            'cover.max' => 'Ukuran cover maksimal 4MB.',
+            'video_file.required' => 'Video film wajib diupload.',
+            'video_file.mimes' => 'Format video harus MP4, WebM, atau OGG.',
+            'video_file.max' => 'Ukuran video maksimal 100MB.',
         ]);
 
         // Handle thumbnail upload
@@ -81,6 +96,19 @@ class FilmController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'video_file' => 'nullable|mimes:mp4,webm,ogg|max:102400',
+        ], [
+            'title.required' => 'Judul film wajib diisi.',
+            'description.required' => 'Deskripsi film wajib diisi.',
+            'genre.required' => 'Genre wajib dipilih minimal satu.',
+            'duration.required' => 'Durasi film wajib diisi.',
+            'duration.min' => 'Durasi film minimal 1 menit.',
+            'release_year.required' => 'Tahun rilis wajib diisi.',
+            'thumbnail.image' => 'Thumbnail harus berupa file gambar.',
+            'thumbnail.max' => 'Ukuran thumbnail maksimal 2MB.',
+            'cover.image' => 'Cover harus berupa file gambar.',
+            'cover.max' => 'Ukuran cover maksimal 4MB.',
+            'video_file.mimes' => 'Format video harus MP4, WebM, atau OGG.',
+            'video_file.max' => 'Ukuran video maksimal 100MB.',
         ]);
 
         // Handle thumbnail upload
