@@ -11,66 +11,68 @@
 </div>
 
 <div class="admin-card">
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Invoice</th>
-                <th>User</th>
-                <th>Paket</th>
-                <th>Metode</th>
-                <th>Amount</th>
-                <th>Bukti</th>
-                <th>Status</th>
-                <th>Tanggal</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-        @forelse($payments as $payment)
-            <tr>
-                <td style="font-family:monospace;font-size:0.75rem;">{{ $payment->invoice_id }}</td>
-                <td>
-                    <div style="font-weight:600;color:white;">{{ $payment->user->name }}</div>
-                    <div style="font-size:0.75rem;color:var(--sv-text-muted);">{{ $payment->user->email }}</div>
-                </td>
-                <td><span class="admin-badge admin-badge-info">{{ ucfirst($payment->subscription->package ?? '-') }}</span></td>
-                <td>{{ $payment->method_label }}</td>
-                <td style="font-weight:600;">Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
-                <td>
-                    @if($payment->payment_proof)
-                        <img src="{{ asset('storage/' . $payment->payment_proof) }}"
-                             style="width:40px;height:40px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--sv-border);"
-                             onclick="showProof('{{ asset('storage/' . $payment->payment_proof) }}')"
-                             title="Klik untuk memperbesar">
-                    @else
-                        <span style="color:var(--sv-text-muted);font-size:0.8rem;">-</span>
-                    @endif
-                </td>
-                <td><span class="admin-badge admin-badge-{{ $payment->status_color }}">{{ $payment->status_label }}</span></td>
-                <td style="font-size:0.8rem;">{{ $payment->created_at->format('d M Y H:i') }}</td>
-                <td>
-                    @if($payment->status === 'pending')
-                        <div style="display:flex;gap:6px;">
-                            <form method="POST" action="{{ route('admin.subscriptions.approve', $payment) }}">
-                                @csrf
-                                <button type="submit" class="sv-btn sv-btn-sm" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);" onclick="return confirm('Approve pembayaran ini?')">Approve</button>
-                            </form>
-                            <form method="POST" action="{{ route('admin.subscriptions.reject', $payment) }}" onsubmit="return confirmReject(event)">
-                                @csrf
-                                <input type="hidden" name="reason" id="reject-reason-{{ $payment->id }}">
-                                <button type="submit" class="sv-btn sv-btn-sm sv-btn-danger">Reject</button>
-                            </form>
-                        </div>
-                    @else
-                        <span style="font-size:0.75rem;color:var(--sv-text-muted);">{{ $payment->admin_notes ?? '-' }}</span>
-                    @endif
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--sv-text-muted);">Tidak ada transaksi</td></tr>
-        @endforelse
-        </tbody>
-    </table>
+    <div style="overflow-x: auto; width: 100%;">
+        <table class="admin-table" style="white-space: nowrap; min-width: 100%;">
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>User</th>
+                    <th>Paket</th>
+                    <th>Metode</th>
+                    <th>Amount</th>
+                    <th>Bukti</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+            @forelse($payments as $payment)
+                <tr>
+                    <td style="font-family:monospace;font-size:0.75rem;">{{ $payment->invoice_id }}</td>
+                    <td>
+                        <div style="font-weight:600;color:white;">{{ $payment->user->name }}</div>
+                        <div style="font-size:0.75rem;color:var(--sv-text-muted);">{{ $payment->user->email }}</div>
+                    </td>
+                    <td><span class="admin-badge admin-badge-info">{{ ucfirst($payment->subscription->package ?? '-') }}</span></td>
+                    <td>{{ $payment->method_label }}</td>
+                    <td style="font-weight:600;">Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
+                    <td>
+                        @if($payment->payment_proof)
+                            <img src="{{ asset('storage/' . $payment->payment_proof) }}"
+                                 style="width:40px;height:40px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--sv-border);"
+                                 onclick="showProof('{{ asset('storage/' . $payment->payment_proof) }}')"
+                                 title="Klik untuk memperbesar">
+                        @else
+                            <span style="color:var(--sv-text-muted);font-size:0.8rem;">-</span>
+                        @endif
+                    </td>
+                    <td><span class="admin-badge admin-badge-{{ $payment->status_color }}">{{ $payment->status_label }}</span></td>
+                    <td style="font-size:0.8rem;">{{ $payment->created_at->format('d M Y H:i') }}</td>
+                    <td>
+                        @if($payment->status === 'pending')
+                            <div style="display:flex;gap:6px;">
+                                <form method="POST" action="{{ route('admin.subscriptions.approve', $payment) }}">
+                                    @csrf
+                                    <button type="submit" class="sv-btn sv-btn-sm" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);" onclick="return confirm('Approve pembayaran ini?')">Approve</button>
+                                </form>
+                                <form method="POST" action="{{ route('admin.subscriptions.reject', $payment) }}" onsubmit="return confirmReject(event)">
+                                    @csrf
+                                    <input type="hidden" name="reason" id="reject-reason-{{ $payment->id }}">
+                                    <button type="submit" class="sv-btn sv-btn-sm sv-btn-danger">Reject</button>
+                                </form>
+                            </div>
+                        @else
+                            <span style="font-size:0.75rem;color:var(--sv-text-muted);">{{ $payment->admin_notes ?? '-' }}</span>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--sv-text-muted);">Tidak ada transaksi</td></tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
 
     @if($payments->hasPages())
         <div class="sv-pagination">{!! $payments->withQueryString()->links('partials.pagination') !!}</div>
