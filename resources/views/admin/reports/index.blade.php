@@ -4,7 +4,7 @@
     <h1>Laporan</h1>
 </div>
 
-{{-- Date Filter --}}
+{{-- Date & Status Filter --}}
 <div class="admin-card" style="margin-bottom:24px;">
     <form method="GET" action="{{ route('admin.reports.index') }}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
         <div>
@@ -15,8 +15,17 @@
             <label class="sv-label">Tanggal Akhir</label>
             <input type="date" name="end_date" class="sv-input" value="{{ $endDate }}" style="width:180px;">
         </div>
+        <div>
+            <label class="sv-label">Status Transaksi</label>
+            <select name="status" class="sv-input" style="width:180px;">
+                <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>Semua</option>
+                <option value="success" {{ request('status') === 'success' ? 'selected' : '' }}>Sukses / Approve</option>
+                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Gagal</option>
+            </select>
+        </div>
         <button type="submit" class="sv-btn sv-btn-primary">Filter</button>
-        @if($startDate || $endDate)
+        @if($startDate || $endDate || (request('status') && request('status') !== 'all'))
             <a href="{{ route('admin.reports.index') }}" class="sv-btn sv-btn-outline">Reset</a>
         @endif
     </form>
@@ -52,7 +61,8 @@
 {{-- Export Buttons --}}
 <div class="admin-card" style="margin-bottom:24px;">
     <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">Export Laporan PDF</h3>
-    <div style="display:flex;gap:12px;">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="{{ route('admin.reports.export', ['type' => 'summary', 'start_date' => $startDate, 'end_date' => $endDate, 'status' => request('status')]) }}" class="sv-btn sv-btn-primary">Laporan Summary</a>
         <a href="{{ route('admin.reports.export', ['type' => 'users', 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="sv-btn sv-btn-outline">Laporan Users</a>
         <a href="{{ route('admin.reports.export', ['type' => 'films', 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="sv-btn sv-btn-outline">Laporan Film</a>
         <a href="{{ route('admin.reports.export', ['type' => 'subscriptions', 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="sv-btn sv-btn-outline">Laporan Langganan</a>

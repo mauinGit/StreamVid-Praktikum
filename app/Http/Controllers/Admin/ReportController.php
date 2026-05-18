@@ -16,6 +16,7 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $status = $request->input('status'); // added status filter
 
         // Base queries
         $userQuery = User::where('role', 'user');
@@ -33,6 +34,11 @@ class ReportController extends Controller
             $transactionQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
         }
 
+        // Apply status filter for transactions
+        if ($status && $status !== 'all') {
+            $transactionQuery->where('status', $status);
+        }
+
         $totalUsers = $userQuery->count();
         $totalFilms = $filmQuery->count();
         $totalSubscribers = (clone $subscriptionQuery)->where('status', 'active')->where('end_date', '>=', now())->distinct('user_id')->count();
@@ -43,7 +49,7 @@ class ReportController extends Controller
 
         return view('admin.reports.index', compact(
             'totalUsers', 'totalFilms', 'totalSubscribers', 'totalRevenue', 'totalTransactions',
-            'transactions', 'startDate', 'endDate'
+            'transactions', 'startDate', 'endDate', 'status'
         ));
     }
 
@@ -51,6 +57,7 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $status = $request->input('status');
 
         switch ($type) {
             case 'users':
@@ -79,6 +86,39 @@ class ReportController extends Controller
                 $data = $query->get();
                 $pdf = Pdf::loadView('admin.reports.subscriptions-pdf', compact('data', 'startDate', 'endDate'));
                 return $pdf->download('laporan-subscriptions-' . date('Y-m-d') . '.pdf');
+
+            case 'summary':
+                // Base queries for summary
+                $userQuery = User::where('role', 'user');
+                $filmQuery = Film::query();
+                $subscriptionQuery = Subscription::query();
+                $paymentQuery = Payment::where('status', 'success');
+                $transactionQuery = Payment::with(['user', 'subscription']);
+
+                if ($startDate && $endDate) {
+                    $userQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
+                    $filmQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
+                    $subscriptionQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
+                    $paymentQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
+                    $transactionQuery->whereBetween('created_at', [$startDate, $endDate . ' 23:59:59']);
+                }
+
+                if ($status && $status !== 'all') {
+                    $transactionQuery->where('status', $status);
+                }
+
+                $totalUsers = $userQuery->count();
+                $totalFilms = $filmQuery->count();
+                $totalSubscribers = (clone $subscriptionQuery)->where('status', 'active')->where('end_date', '>=', now())->distinct('user_id')->count();
+                $totalRevenue = $paymentQuery->sum('amount');
+                $totalTransactions = (clone $transactionQuery)->count();
+                $transactions = $transactionQuery->latest()->get();
+
+                $pdf = Pdf::loadView('admin.reports.summary-pdf', compact(
+                    'totalUsers', 'totalFilms', 'totalSubscribers', 'totalRevenue', 'totalTransactions',
+                    'transactions', 'startDate', 'endDate', 'status'
+                ));
+                return $pdf->download('laporan-summary-' . date('Y-m-d') . '.pdf');
 
             default:
                 abort(404);

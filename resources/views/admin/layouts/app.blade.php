@@ -103,6 +103,22 @@
         <div class="sv-flash sv-flash-success">{{ session('success') }}</div>
     @endif
 
+    {{-- Logout Confirmation Modal --}}
+    <div id="logoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+        <div style="background:var(--sv-bg-elevated);border:1px solid var(--sv-border);border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+            <div style="font-size:3rem;margin-bottom:16px;">👋</div>
+            <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:8px;">Yakin mau keluar?</h3>
+            <p style="color:var(--sv-text-muted);font-size:0.9rem;margin-bottom:24px;">Sampai jumpa lagi! Kami akan merindukanmu 😢</p>
+            <div style="display:flex;gap:12px;justify-content:center;">
+                <button onclick="closeLogoutModal()" class="sv-btn sv-btn-outline" style="flex:1;">Batal</button>
+                <form method="POST" action="{{ route('logout') }}" style="flex:1;">
+                    @csrf
+                    <button type="submit" class="sv-btn sv-btn-primary" style="width:100%;background:#ef4444;">Ya, Keluar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Mobile Hamburger --}}
     <button class="admin-mobile-hamburger" onclick="toggleAdminSidebar()">☰</button>
 
@@ -112,18 +128,15 @@
     <aside class="admin-sidebar" id="adminSidebar">
         <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 200px; height: 50px; margin-left: 24px; margin-bottom: 16px;">
         <ul class="admin-nav">
-            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-            <li><a href="{{ route('admin.films.index') }}" class="{{ request()->routeIs('admin.films.*') ? 'active' : '' }}">Film</a></li>
-            <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Users</a></li>
-            <li><a href="{{ route('admin.subscriptions.index') }}" class="{{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">Subscriptions</a></li>
-            <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">Reports</a></li>
+            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">📊 Dashboard</a></li>
+            <li><a href="{{ route('admin.films.index') }}" class="{{ request()->routeIs('admin.films.*') ? 'active' : '' }}">🎬 Film</a></li>
+            <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">👥 Users</a></li>
+            <li><a href="{{ route('admin.subscriptions.index') }}" class="{{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">💳 Subscriptions</a></li>
+            <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">📋 Reports</a></li>
             <div class="admin-nav-divider"></div>
-            <li><a href="{{ route('home') }}">Ke Website</a></li>
+            <li><a href="{{ route('home') }}">🏠 Ke Website</a></li>
             <li>
-                <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-                    @csrf
-                    <a href="#" onclick="this.closest('form').submit();return false;">Logout</a>
-                </form>
+                <a href="#" onclick="openLogoutModal();return false;" style="color:#ef4444;">🚪 Logout</a>
             </li>
         </ul>
     </aside>
@@ -147,6 +160,16 @@
                 setTimeout(() => overlay.style.display = 'none', 300);
                 document.body.style.overflow = '';
             }
+        }
+
+        // Logout modal
+        function openLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            if (modal) modal.style.display = 'flex';
+        }
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            if (modal) modal.style.display = 'none';
         }
         
         // Wrap tables for responsive scrolling

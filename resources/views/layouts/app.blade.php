@@ -799,6 +799,16 @@
             z-index: 9999;
             gap: 20px;
         }
+
+        /* Desktop/Mobile visibility */
+        .sv-mobile-only { display: none !important; }
+        .sv-desktop-only { display: flex !important; }
+
+        @media (max-width: 1024px) {
+            .sv-mobile-only { display: block !important; }
+            .sv-desktop-only { display: none !important; }
+            .sv-navbar-links.sv-desktop-only { display: none !important; }
+        }
     </style>
 </head>
 
@@ -811,20 +821,38 @@
         <div class="sv-flash sv-flash-error">✕ {{ session('error') }}</div>
     @endif
 
+    {{-- Logout Confirmation Modal --}}
+    <div id="logoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+        <div style="background:var(--sv-bg-elevated);border:1px solid var(--sv-border);border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+            <div style="font-size:3rem;margin-bottom:16px;">👋</div>
+            <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:8px;">Yakin mau keluar?</h3>
+            <p style="color:var(--sv-text-muted);font-size:0.9rem;margin-bottom:24px;">Sampai jumpa lagi! Kami akan merindukanmu 😢</p>
+            <div style="display:flex;gap:12px;justify-content:center;">
+                <button onclick="closeLogoutModal()" class="sv-btn sv-btn-outline" style="flex:1;">Batal</button>
+                <form method="POST" action="{{ route('logout') }}" style="flex:1;">
+                    @csrf
+                    <button type="submit" class="sv-btn sv-btn-primary" style="width:100%;background:#ef4444;">Ya, Keluar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Navbar --}}
     <nav class="sv-navbar" id="navbar">
         <div style="display:flex;align-items:center;gap:40px;">
             <a href="{{ route('home') }}" class="sv-navbar-brand">
                 <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width: 160px; height: 40px;">
             </a>
-            <ul class="sv-navbar-links">
+            {{-- Desktop Navbar Links --}}
+            <ul class="sv-navbar-links sv-desktop-only">
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-                <li><a href="{{ route('films.index') }}"
-                        class="{{ request()->routeIs('films.*') ? 'active' : '' }}">Films</a></li>
+                <li><a href="{{ route('films.index') }}" class="{{ request()->routeIs('films.*') ? 'active' : '' }}">Film</a></li>
                 @auth
-                    @if(!auth()->user()->isAdmin())
-                        <li><a href="{{ route('collection.index') }}"
-                                class="{{ request()->routeIs('collection.*') || request()->routeIs('mylist.*') || request()->routeIs('history.*') ? 'active' : '' }}">Koleksi Saya</a></li>
+                    @if(auth()->user()->isAdmin())
+                        <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">Dashboard</a></li>
+                    @else
+                        <li><a href="{{ route('collection.index') }}" class="{{ request()->routeIs('collection.*') || request()->routeIs('mylist.*') || request()->routeIs('history.*') ? 'active' : '' }}">Koleksi Saya</a></li>
+                        <li><a href="{{ route('payment.history') }}" class="{{ request()->routeIs('payment.history') ? 'active' : '' }}">Riwayat Pemesanan</a></li>
                     @endif
                 @endauth
             </ul>
@@ -835,8 +863,9 @@
                 <a href="{{ route('login') }}" class="sv-btn sv-btn-ghost sv-btn-sm">Login</a>
                 <a href="{{ route('register') }}" class="sv-btn sv-btn-primary sv-btn-sm">Sign Up</a>
             @else
-                <div class="sv-dropdown" id="user-dropdown">
-                    <button class="sv-dropdown-trigger" onclick="toggleDropdown(event)">
+                {{-- Desktop: Profile + Logout icon --}}
+                <div class="sv-desktop-only" style="display:flex;align-items:center;gap:16px;">
+                    <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--sv-text-secondary);transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--sv-text-secondary)'">
                         <div class="sv-dropdown-avatar">
                             @if(auth()->user()->profile_photo)
                                 <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
@@ -844,29 +873,42 @@
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             @endif
                         </div>
-                        <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor">
-                            <path d="M1 1l4 4 4-4" />
-                        </svg>
+                    </a>
+                    <button onclick="openLogoutModal()" style="background:none;border:none;cursor:pointer;color:var(--sv-text-secondary);transition:color 0.2s;padding:6px;" title="Logout" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--sv-text-secondary)'">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </button>
-                    <div class="sv-dropdown-menu">
-                        <a href="{{ route('home') }}">🏠 Home</a>
-                        <a href="{{ route('films.index') }}">🎬 Film</a>
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
-                        @else
-                            <a href="{{ route('collection.index') }}">📂 Koleksi Saya</a>
-                        @endif
-                        <div class="sv-dropdown-divider"></div>
-                        <a href="{{ route('profile.edit') }}">👤 Profile</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit">🚪 Logout</button>
-                        </form>
-                    </div>
                 </div>
+
+                {{-- Mobile: Hamburger --}}
+                <button class="sv-mobile-only sv-mobile-hamburger" onclick="toggleMobileMenu()" style="background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;">☰</button>
             @endguest
         </div>
     </nav>
+
+    {{-- Mobile Menu --}}
+    @auth
+    <div id="mobileMenu" class="sv-mobile-only" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);">
+        <div style="padding:20px;display:flex;flex-direction:column;height:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+                <img src="{{ asset('img/logo.png') }}" alt="StreamVid" style="width:130px;">
+                <button onclick="toggleMobileMenu()" style="background:none;border:none;color:white;font-size:1.8rem;cursor:pointer;">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
+                <a href="{{ route('home') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;{{ request()->routeIs('home') ? 'color:white;background:rgba(255,255,255,0.05);' : '' }}">🏠 Home</a>
+                <a href="{{ route('films.index') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;{{ request()->routeIs('films.*') ? 'color:white;background:rgba(255,255,255,0.05);' : '' }}">🎬 Film</a>
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;">📊 Dashboard</a>
+                @else
+                    <a href="{{ route('collection.index') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;">📂 Koleksi Saya</a>
+                    <a href="{{ route('payment.history') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;">🧾 Riwayat Pemesanan</a>
+                @endif
+                <div style="height:1px;background:var(--sv-border);margin:8px 0;"></div>
+                <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--sv-text-secondary);text-decoration:none;border-radius:8px;font-size:1rem;transition:all 0.2s;">👤 Profile</a>
+            </div>
+            <button onclick="openLogoutModal();toggleMobileMenu();" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#ef4444;font-size:1rem;font-weight:600;cursor:pointer;width:100%;">🚪 Logout</button>
+        </div>
+    </div>
+    @endauth
 
     {{-- Main Content --}}
     <main>
@@ -934,20 +976,23 @@
             document.querySelectorAll('.sv-flash').forEach(el => el.remove());
         }, 4000);
 
-        // Click-based dropdown toggle
-        function toggleDropdown(e) {
-            e.stopPropagation();
-            const menu = document.querySelector('#user-dropdown .sv-dropdown-menu');
-            if (menu) menu.classList.toggle('open');
+        // Logout modal
+        function openLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            if (modal) modal.style.display = 'flex';
         }
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (e) {
-            const dropdown = document.getElementById('user-dropdown');
-            if (dropdown && !dropdown.contains(e.target)) {
-                const menu = dropdown.querySelector('.sv-dropdown-menu');
-                if (menu) menu.classList.remove('open');
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) {
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
             }
-        });
+        }
     </script>
 
     @stack('scripts')
